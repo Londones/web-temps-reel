@@ -19,7 +19,7 @@ const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export default function SignInForm() {
+export default function LoginForm() {
   const { setAuth } = useAuth();
   const navigateTo = useNavigate();
   const location = useLocation();
@@ -56,7 +56,7 @@ export default function SignInForm() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/signIn",
+        "http://localhost:3000/auth/login",
         JSON.stringify({ email, password }),
         {
           headers: {

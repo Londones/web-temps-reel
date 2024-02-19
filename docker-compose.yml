@@ -1,5 +1,14 @@
 version: '3'
 services:
+  db:
+    image: postgres:latest
+    environment:
+      - POSGRES_USER: ${POSTGRES_USER}
+      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      - POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - 5432:5432
+
   client:
     build: 
       context: ./client
@@ -12,6 +21,8 @@ services:
     environment:
       - NODE_ENV=development
     command: npm run dev
+    depends_on:
+      - db
 
   server:
     build: 
@@ -21,7 +32,9 @@ services:
       - ./server:/app
       - /app/node_modules
     ports:
-      - 5000:5000
+      - 3000:3000
     environment:
       - NODE_ENV=development
     command: npm start
+    depends_on:
+      - db

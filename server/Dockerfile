@@ -14,4 +14,4 @@ RUN npm install
 COPY . .
 
 # Make port 3000 available to the world outside this container
-EXPOSE 5000
+EXPOSE 3000

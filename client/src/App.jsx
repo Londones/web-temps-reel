@@ -2,8 +2,8 @@ import { useState } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import useAuth from "./hooks/useAuth";
-import SignInForm from "./components/SignInForm";
-import SignUpForm from "./components/SignUpForm";
+import LoginForm from "./components/LoginForm";
+import RegisterForm from "./components/RegisterForm";
 
 function App() {
   const { auth } = useAuth();
@@ -11,8 +11,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/signIn" element={<SignInForm />} />
-        <Route path="/signUp" element={<SignUpForm />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/register" element={<RegisterForm />} />
       </Routes>
     </Router>
   );
