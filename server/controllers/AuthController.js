@@ -56,6 +56,7 @@ const AuthController = {
           secure: true,
           maxAge: 24 * 60 * 60 * 1000,
         });
+        await user.save();
         res.status(200).json({ token });
       } else {
         res.status(401).json({ error: "Invalid username or password" });
