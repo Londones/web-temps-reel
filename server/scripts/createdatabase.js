@@ -12,7 +12,7 @@ async function createDatabase() {
   try {
     await client.connect();
 
-    const dbName = `${process.env.POSTGRES_DATABASE}`; // replace with your database name
+    const dbName = `${process.env.POSTGRES_DB}`; // replace with your database name
 
     const res = await client.query(
       `SELECT datname FROM pg_catalog.pg_database WHERE lower(datname) = lower('${dbName}')`

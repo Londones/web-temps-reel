@@ -9,9 +9,9 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import axios from "../api/axios";
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -71,9 +71,7 @@ export default function RegisterForm() {
       );
       handleSuccess();
     } catch (error) {
-      if (!error?.response) {
-        setErrMsg("Erreur réseau");
-      } else if (error.response?.status === 400) {
+      if (error.response?.status === 400) {
         setErrMsg(error.response?.data?.error);
       } else {
         setErrMsg("Inscription impossible");
