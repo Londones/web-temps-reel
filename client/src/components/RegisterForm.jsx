@@ -9,20 +9,21 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import axios from "../api/axios";
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export default function SignUpForm() {
+export default function RegisterForm() {
   const userRef = useRef();
   const [open, setOpen] = useState(false);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -34,7 +35,7 @@ export default function SignUpForm() {
 
   useEffect(() => {
     setErrMsg("");
-  }, [firstName, lastName, email, password]);
+  }, [firstName, lastName, email, password, username]);
 
   const handleSuccess = () => {
     setOpen(true);
@@ -53,8 +54,14 @@ export default function SignUpForm() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/signUp",
-        JSON.stringify({ nom: lastName, prenom: firstName, email, password }),
+        "http://localhost:3000/auth/register",
+        JSON.stringify({
+          name: lastName,
+          firstName,
+          email,
+          password,
+          username,
+        }),
         {
           headers: {
             "Content-Type": "application/json",
@@ -62,15 +69,10 @@ export default function SignUpForm() {
           withCredentials: true,
         }
       );
-      console.log(JSON.stringify(response));
       handleSuccess();
     } catch (error) {
-      if (!error?.response) {
-        setErrMsg("Erreur réseau");
-      } else if (error.response?.status === 400) {
-        setErrMsg("Champ(s) manquant(s)");
-      } else if (error.response?.status === 409) {
-        setErrMsg("Cet email est déjà utilisé");
+      if (error.response?.status === 400) {
+        setErrMsg(error.response?.data?.error);
       } else {
         setErrMsg("Inscription impossible");
       }
@@ -125,7 +127,7 @@ export default function SignUpForm() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            S'inscrire
+            S&apos;inscrire
           </Typography>
           <Box
             component="form"
@@ -162,6 +164,17 @@ export default function SignUpForm() {
                 <TextField
                   required
                   fullWidth
+                  id="username"
+                  label="Nom d'utilisateur"
+                  name="username"
+                  autoComplete="username"
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
                   id="email"
                   label="Adresse email"
                   name="email"
@@ -190,11 +203,11 @@ export default function SignUpForm() {
               sx={{ mt: 3, mb: 2 }}
               disableElevation
             >
-              S'inscrire
+              S&apos;inscrire
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/signIn" variant="body2">
+                <Link href="/login" variant="body2">
                   Déjà inscrit ? Se connecter
                 </Link>
               </Grid>
