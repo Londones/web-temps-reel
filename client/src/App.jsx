@@ -1,33 +1,35 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import useAuth from "./hooks/useAuth";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
+import JoinQuizComponent from "./components/JoinQuiz";
 import Layout from "./layout/Layout";
 import Home from "./pages/Home";
 import AdminDashboard from "./pages/AdminDashboard";
 import io from "socket.io-client";
+import "./App.css";
 
 function App() {
   const { auth } = useAuth();
+  const socket = io("http://localhost:3000");
+  const [sessionId, setSessionId] = useState(null);
+  const [message, setMessage] = useState("");
+
   useEffect(() => {
-    const socket = io("http://localhost:3000");  //remplace par env variable
-
-    socket.on("connect", () => {
-      console.log("Connected to server");
-    });
-
-    socket.on("disconnect", () => {
-      console.log("Disconnected from server");
-    });
-
-    // Envoi d'un message du client au serveur
-    socket.emit("message", "Ceci est un message envoyé depuis le client");
-
-    return () => {
-      socket.disconnect();
+    const handleCreateSession = () => {
+      const newSessionId = Math.random().toString(36).substring(2, 15);
+      setSessionId(newSessionId);
+      socket.emit("session-created", newSessionId);
     };
+
+    handleCreateSession();
   }, []);
+
+  //*message reponse à la connexion à la session
+  socket.on("message", (data) => {
+    setMessage(data);
+  });
 
   return (
     <Router>
@@ -40,6 +42,9 @@ function App() {
         <Route path="/register" element={<RegisterForm />} />
       </Routes>
     </Router>
+     {sessionId && <JoinQuizComponent socket={socket} sessionId={sessionId} />}
+      {sessionId && <p>Session ID: {sessionId}</p>}
+      {message && <p>{message}</p>}
   );
 }
 
