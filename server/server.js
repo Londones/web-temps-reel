@@ -31,13 +31,26 @@ const io = socketIo(server, {
 io.on("connection", (socket) => {
   console.log(`New client connected: ${socket.id}`);
 
-  socket.on("message", (data) => {
-    console.log("Côté server : ", data);
-    io.emit("message", `${socket.id.substr(0, 2)}...: ${data}`);
+
+  socket.on("session-created", (sessionId) => {
+    console.log("New session created with ID:", sessionId);
+  });
+
+  socket.on("join-room", (sessionId) => {
+    socket.join(sessionId);
+    console.log(`Socket ${socket.id} joined session ${sessionId}`);
+    io.to(sessionId).emit("message", `Bienvenue dans la session du quiz ${sessionId} !`);
   });
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");
+  });
+
+
+  socket.on("connect_error", (err) => {
+    console.log(err.message);
+    console.log(err.description);
+    console.log(err.context);
   });
 });
 
