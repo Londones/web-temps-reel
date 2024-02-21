@@ -12,11 +12,12 @@ import "./App.css";
 
 function App() {
   const { auth } = useAuth();
-  const socket = io("http://localhost:3000");
   const [sessionId, setSessionId] = useState(null);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
+    const socket = io("http://localhost:3000");
+
     const handleCreateSession = () => {
       const newSessionId = Math.random().toString(36).substring(2, 15);
       setSessionId(newSessionId);
@@ -24,12 +25,16 @@ function App() {
     };
 
     handleCreateSession();
-  }, []);
 
-  //*message reponse à la connexion à la session
-  socket.on("message", (data) => {
-    setMessage(data);
-  });
+    socket.on("message", (data) => {
+      setMessage(data);
+    });
+
+    return () => {
+      socket.off("message");
+      socket.disconnect();
+    };
+  }, []);
 
   return (
     <Router>
@@ -41,10 +46,11 @@ function App() {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
       </Routes>
-    </Router>
-     {sessionId && <JoinQuizComponent socket={socket} sessionId={sessionId} />}
+
+      {sessionId && <JoinQuizComponent socket={socket} sessionId={sessionId} />}
       {sessionId && <p>Session ID: {sessionId}</p>}
       {message && <p>{message}</p>}
+    </Router>
   );
 }
 
