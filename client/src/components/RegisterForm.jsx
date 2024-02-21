@@ -54,7 +54,7 @@ export default function RegisterForm() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/auth/register",
+        `${import.meta.env.VITE_SERVER_URL}/auth/register`,
         JSON.stringify({
           name: lastName,
           firstName,
