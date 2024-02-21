@@ -17,7 +17,7 @@ function App() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const socket = io("http://localhost:3000");
+    const socket = io(`${import.meta.env.VITE_SERVER_URL}`);
 
     const handleCreateSession = () => {
       const newSessionId = Math.random().toString(36).substring(2, 15);

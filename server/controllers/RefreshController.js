@@ -18,7 +18,15 @@ const RefreshController = {
           expiresIn: "1h",
         }
       );
-      res.status(200).json({ token });
+      const email = user.email;
+      const username = user.username;
+      const id = user.id;
+      const name = user.name;
+      const firstName = user.firstName;
+      const role = user.role;
+      res
+        .status(200)
+        .json({ token, email, username, id, name, firstName, role });
     });
   },
 };
