@@ -1,3 +1,4 @@
+import "./App.css";
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import useAuth from "./hooks/useAuth";
@@ -7,6 +8,7 @@ import Layout from "./layout/Layout";
 import Home from "./pages/Home";
 import AdminDashboard from "./pages/AdminDashboard";
 import io from "socket.io-client";
+import Quiz from "./pages/Quiz";
 
 function App() {
   const { auth } = useAuth();
@@ -35,6 +37,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/quiz" element={<Quiz />} />
         </Route>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
