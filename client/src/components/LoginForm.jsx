@@ -14,7 +14,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import useAuth from "../hooks/useAuth";
-import { Checkbox } from "@mui/material";
+import { Checkbox, FormControlLabel } from "@mui/material";
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -174,11 +174,16 @@ export default function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
-            <Checkbox
-              checked={persist}
-              onChange={togglePersist}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  value="remember"
+                  onClick={togglePersist}
+                  color="primary"
+                />
+              }
               label="Se souvenir de moi"
-            ></Checkbox>
+            />
             <Button
               type="submit"
               fullWidth
@@ -194,7 +199,7 @@ export default function LoginForm() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/signup" variant="body2">
+                <Link href="/register" variant="body2">
                   {"Pas encore inscrit ? S'inscrire"}
                 </Link>
               </Grid>
