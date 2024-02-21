@@ -4,6 +4,9 @@ import useAuth from "./hooks/useAuth";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import JoinQuizComponent from "./components/JoinQuiz";
+import Layout from "./layout/Layout";
+import Home from "./pages/Home";
+import AdminDashboard from "./pages/AdminDashboard";
 import io from "socket.io-client";
 import "./App.css";
 
@@ -29,17 +32,19 @@ function App() {
   });
 
   return (
-    <>
-      <Router>
-        <Routes>
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/register" element={<RegisterForm />} />
-        </Routes>
-      </Router>
-      {sessionId && <JoinQuizComponent socket={socket} sessionId={sessionId} />}
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        </Route>
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/register" element={<RegisterForm />} />
+      </Routes>
+    </Router>
+     {sessionId && <JoinQuizComponent socket={socket} sessionId={sessionId} />}
       {sessionId && <p>Session ID: {sessionId}</p>}
       {message && <p>{message}</p>}
-    </>
   );
 }
 
