@@ -14,13 +14,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import useAuth from "../hooks/useAuth";
+import { Checkbox, FormControlLabel } from "@mui/material";
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 export default function LoginForm() {
-  const { setAuth } = useAuth();
+  const { setAuth, persist, setPersist } = useAuth();
   const navigateTo = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -56,7 +57,7 @@ export default function LoginForm() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/auth/login",
+        `${import.meta.env.VITE_SERVER_URL}/auth/login`,
         JSON.stringify({ email, password }),
         {
           headers: {
@@ -66,11 +67,13 @@ export default function LoginForm() {
         }
       );
 
-      const accessToken = response?.data?.accessToken;
+      const accessToken = response?.data?.token;
       const userId = response?.data?.id;
-      const nom = response?.data?.nom;
-      const prenom = response?.data?.prenom;
-      setAuth({ userId, nom, prenom, email, password, accessToken });
+      const name = response?.data?.name;
+      const firstName = response?.data?.firstName;
+      const username = response?.data?.username;
+      const role = response?.data?.role;
+      setAuth({ userId, name, firstName, email, username, accessToken, role });
       setEmail("");
       setPassword("");
       navigateTo(from, { replace: true });
@@ -87,6 +90,14 @@ export default function LoginForm() {
       handleClick();
     }
   };
+
+  const togglePersist = () => {
+    setPersist((prev) => !prev);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("persist", persist);
+  }, [persist]);
 
   return (
     <Grid
@@ -163,6 +174,16 @@ export default function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  value="remember"
+                  onClick={togglePersist}
+                  color="primary"
+                />
+              }
+              label="Se souvenir de moi"
+            />
             <Button
               type="submit"
               fullWidth
@@ -178,7 +199,7 @@ export default function LoginForm() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/signup" variant="body2">
+                <Link href="/register" variant="body2">
                   {"Pas encore inscrit ? S'inscrire"}
                 </Link>
               </Grid>
