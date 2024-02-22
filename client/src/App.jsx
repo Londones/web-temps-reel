@@ -43,7 +43,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/quiz" element={<Quiz />} />
+          <Route path="/admin/quiz/:id" element={<Quiz />} />
         </Route>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />

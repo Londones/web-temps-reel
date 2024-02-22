@@ -19,7 +19,7 @@ const CardQuiz = ({ quiz }) => {
             </CardContent>
             <CardActions>
                 <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                    <Link to="/admin/quiz">
+                    <Link to={`/admin/quiz/${quiz.id}`}>
                         <Button size="small" variant="contained">
                             Edit quiz
                         </Button>
