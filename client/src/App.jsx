@@ -1,4 +1,5 @@
 import "./App.css";
+import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import useAuth from "./hooks/useAuth";
 import LoginForm from "./components/LoginForm";
@@ -6,10 +7,10 @@ import RegisterForm from "./components/RegisterForm";
 import Layout from "./layout/Layout";
 import Home from "./pages/Home";
 import AdminDashboard from "./pages/AdminDashboard";
-import "./App.css";
 import Quiz from "./pages/Quiz";
 import PersistLogin from "./auth/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
+import io from "socket.io-client";
 
 function App() {
   const { auth } = useAuth();
