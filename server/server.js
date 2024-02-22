@@ -15,9 +15,13 @@ app.use(cors(corsOptions));
 
 const AuthRoutes = require("./routes/AuthRoutes");
 const RefreshRoutes = require("./routes/RefreshRoutes");
+const QuizRoutes = require("./routes/QuizRoutes");
+const QuestionRoutes = require("./routes/QuestionRoutes");
 
 app.use("/auth", AuthRoutes);
 app.use("/refresh", RefreshRoutes);
+app.use("/quiz", QuizRoutes);
+app.use("/question", QuestionRoutes);
 
 const server = http.createServer(app);
 const io = socketIo(server, {
