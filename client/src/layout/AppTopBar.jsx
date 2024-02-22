@@ -11,14 +11,20 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-
-const pages = [
-  { label: "Create quiz", link: "/admin/dashboard" },
-];
+import useLogout from "../hooks/useLogout";
+import useAuth from "../hooks/useAuth";
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const { auth } = useAuth();
+  console.log(auth);
+  const logout = useLogout();
+  const pages = [];
+
+  if (auth?.role === "admin") {
+    pages.push({ label: "Dashboard", link: "/admin/dashboard" });
+  }
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -35,8 +41,16 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
+  const handleLogout = () => {
+    handleCloseUserMenu();
+    logout();
+  };
+
   return (
-    <AppBar position="static" style={{"boxShadow": "none", "backgroundColor" : "white", "color" : "black"}}>
+    <AppBar
+      position="static"
+      style={{ boxShadow: "none", backgroundColor: "white", color: "black" }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -55,7 +69,7 @@ function ResponsiveAppBar() {
             QUIZZRT
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}  >
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -85,7 +99,7 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem 
+                <MenuItem
                   key={page.label}
                   onClick={handleCloseNavMenu}
                   component={Link}
@@ -127,35 +141,53 @@ function ResponsiveAppBar() {
               </Button>
             ))}
           </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-            </IconButton>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Profil</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Se déconnecter</Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
+          {auth?.username ? (
+            <Box sx={{ flexGrow: 0 }}>
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              </IconButton>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">Profil</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <Typography textAlign="center">Se déconnecter</Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          ) : (
+            <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+              <Button
+                component={Link}
+                to="/login"
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                Connexion
+              </Button>
+              <Button
+                component={Link}
+                to="/register"
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                Inscription
+              </Button>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
