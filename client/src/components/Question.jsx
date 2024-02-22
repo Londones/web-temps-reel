@@ -8,7 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 const Question = () => {
     const [questions, setQuestions] = useState([]);
-    const [question, setQuestion] = useState({ quiz_id: 1, question: '', options: [], answer: []});
+    const [question, setQuestion] = useState({ quiz_id: 1, question: '', options: [], answers: []});
     const [options, setOptions] = useState(Array(4).fill(''));
 
     const handleOptionChange = (index) => (event) => {
@@ -21,15 +21,15 @@ const Question = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setQuestions([...questions, question]);
-        setQuestion({ quiz_id: 1, question: '', options: [], answer: [] });
+        setQuestion({ quiz_id: 1, question: '', options: [], answers: [] });
         setOptions(Array(4).fill(''));
     }
 
     const handleCorrectAnswerChange = (event, index) => {
         if (event.target.checked) {
-            setQuestion({ ...question, answer: [...question.answer, options[index]] });
+            setQuestion({ ...question, answers: [...question.answers, options[index]] });
         } else {
-            setQuestion({ ...question, answer: question.answer.filter(answer => answer !== options[index]) });
+            setQuestion({ ...question, answers: question.answers.filter(answer => answer !== options[index]) });
         }
     };
 
@@ -68,7 +68,7 @@ const Question = () => {
                         onChange={handleOptionChange(i)}
                     />
                     <FormControlLabel control={<Checkbox
-                        checked={question.answer.includes(option)}
+                        checked={question.answers.includes(option)}
                         onChange={(e) => handleCorrectAnswerChange(e, i)}
                         value={option}
                     />}

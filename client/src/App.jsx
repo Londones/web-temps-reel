@@ -32,7 +32,7 @@ function App() {
     });
 
     return () => {
-      socket.off("message");
+      socket.off("message"); 
       socket.disconnect();
     };
   }, []);
