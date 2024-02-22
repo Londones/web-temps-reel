@@ -1,15 +1,15 @@
 import "./App.css";
-import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import useAuth from "./hooks/useAuth";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
-import JoinQuizComponent from "./components/JoinQuiz";
 import Layout from "./layout/Layout";
 import Home from "./pages/Home";
 import AdminDashboard from "./pages/AdminDashboard";
-import io from "socket.io-client";
+import "./App.css";
 import Quiz from "./pages/Quiz";
+import PersistLogin from "./auth/PersistLogin";
+import RequireAuth from "./components/RequireAuth";
 
 function App() {
   const { auth } = useAuth();
@@ -41,17 +41,20 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/quiz/:id" element={<Quiz />} />
+          <Route element={<PersistLogin />}>
+            <Route index element={<Home />} />
+            <Route
+              path="/admin/*"
+              element={<RequireAuth allowedRoles={"admin"} />}
+            >
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="quiz/:id" element={<Quiz />} />
+            </Route>
+          </Route>
         </Route>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegisterForm />} />
       </Routes>
-
-      {/* {sessionId && <JoinQuizComponent socket={socket} sessionId={sessionId} />}
-      {sessionId && <p>Session ID: {sessionId}</p>}
-      {message && <p>{message}</p>} */}
     </Router>
   );
 }

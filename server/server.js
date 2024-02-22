@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
   socket.on("join-room", (sessionId) => {
     socket.join(sessionId);
     console.log(`Socket ${socket.id} joined session ${sessionId}`);
-    io.to(sessionId).emit("message", `Bienvenue dans la session du quiz ${sessionId} !`);
+    io.to(sessionId).emit("response-join", `Bienvenue dans la session du quiz ${sessionId} !`);
   });
 
   socket.on("disconnect", () => {

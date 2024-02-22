@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import Button from '@mui/material/Button';
 
 const JoinQuizComponent = ({ socket, sessionId }) => {
  const [message, setMessage] = useState("");
@@ -13,10 +14,8 @@ const JoinQuizComponent = ({ socket, sessionId }) => {
  }
  return (
   <>
-   <button onClick={joinQuiz}>
-    Join Room
-   </button>
-   {message && <p>{message}. Créer une session</p>}
+   <Button variant="outlined" onClick={joinQuiz}>Join Room</Button>
+   {message && <p>{message}</p>}
   </>
  );
 }
