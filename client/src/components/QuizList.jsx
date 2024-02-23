@@ -20,9 +20,11 @@ const QuizListComponent = ({ quizzes, addQuiz, isAdmin }) => {
  }
  return (
   <>
+    <div class="quizzes">
     {quizzes.map((quiz, i) => (
-      <JoinQuizCard key={i} quiz={quiz} isAdmin={isAdmin} joinQuiz={handleJoinQuiz} addQuiz={handleAddQuiz}/>
+      <JoinQuizCard class="quiz-card" key={i} quiz={quiz} isAdmin={isAdmin} joinQuiz={handleJoinQuiz} addQuiz={handleAddQuiz}/>
     ))}
+    </div>
   </>
  );
 }

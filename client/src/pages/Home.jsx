@@ -35,7 +35,7 @@ const Home = () => {
 
     return (
         <div>
-            <Typography variant="h4" component="h2">Home</Typography>
+            <Typography variant="h4" component="h2" class="home">Home</Typography>
             <Button color="secondary" variant="outlined" size="small" onClick={handleCreateSession}>Create new session</Button>
             {sessionId && <p>Session ID: {sessionId}</p>}
             {sessionId &&  

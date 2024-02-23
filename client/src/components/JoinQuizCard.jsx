@@ -52,8 +52,8 @@ const JoinQuizCard = ({ quiz, isAdmin, joinQuiz, addQuiz }) => {
             </CardContent>
             <CardActions>
                 <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                    {isAdmin && <Button size="small" variant="contained" onClick={handleAddQuiz}>Add quiz to session</Button>}
-                    {!isAdmin && <Button size="small" variant="contained" onClick={handleJoinQuiz}>Start quiz</Button>}
+                    {isAdmin && <Button size="small" variant="contained" onClick={handleAddQuiz} style={{backgroundColor : "rgb(63, 81, 181)"}}>Add quiz to session</Button>}
+                    {!isAdmin && <Button size="small" variant="contained" onClick={handleJoinQuiz} style={{backgroundColor : "rgb(63, 81, 181)"}}>Start quiz</Button>}
                 </Box>
             </CardActions>
         </Card>
