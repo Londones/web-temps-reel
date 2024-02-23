@@ -8,8 +8,10 @@ export const AuthProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("persist")) || false
   );
 
+  const [sessionQuiz, setSessionQuiz] = useState(null);
+
   return (
-    <AuthContext.Provider value={{ auth, setAuth, persist, setPersist }}>
+    <AuthContext.Provider value={{ auth, setAuth, persist, setPersist, sessionQuiz, setSessionQuiz }}>
       {children}
     </AuthContext.Provider>
   );

@@ -10,6 +10,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import PersistLogin from "./auth/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
 import FormCreateQuestion from "./components/FormCreateQuestion";
+import HomeUser from "./pages/HomeUser";
 
 function App() {
   const { auth } = useAuth();
@@ -19,14 +20,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route element={<PersistLogin />}>
-            <Route index element={<Home />} />
             <Route path="/displayQuiz/:id" element={<Quiz />} />
-            <Route
-              path="/admin/*"
-              element={<RequireAuth allowedRoles={"admin"} />}
-            >
+            <Route path="/admin/*" element={<RequireAuth allowedRoles={"admin"} />}>
+              <Route index element={<Home />} />  
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="quiz/:id/questions" element={<FormCreateQuestion />} />
+            </Route>
+            <Route path = "/user/*" element={<RequireAuth allowedRoles={"user"} />}>
+              <Route index element={<HomeUser />} />  
             </Route>
           </Route>
         </Route>
