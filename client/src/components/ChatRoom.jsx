@@ -9,18 +9,25 @@ const ChatRoom = ({ socket, sessionId }) => {
   const [roomUsers, setRoomUsers] = useState([]);
 
   useEffect(() => {
-    socket.emit("join-room", { sessionId, username: auth.username });
-    socket.on("message", (data) => {
+    socket.emit("join-chat", { sessionId, username: auth.username });
+
+    const handleChatReceived = (data) => {
+      console.log("Message received", data);
       setMessages((messages) => [...messages, data]);
-    });
-    socket.on("room-users", (users) => {
+    };
+
+    const handleRoomUsers = (users) => {
+      console.log("Room users", users);
       setRoomUsers(users);
-    });
+    };
+
+    socket.on("chat-received", handleChatReceived);
+    socket.on("room-users", handleRoomUsers);
 
     return () => {
       socket.disconnect();
     };
-  }, [socket]);
+  }, [socket, sessionId, auth.username]);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -48,8 +55,7 @@ const ChatRoom = ({ socket, sessionId }) => {
   return (
     <>
       <div>
-        <h2>Room Chat</h2>
-        <p>Session ID: {sessionId}</p>
+        <h2>Chat Room {sessionId}</h2>
         <ul>
           {messages.map((message, index) => (
             <li key={index}>
@@ -78,11 +84,10 @@ const ChatRoom = ({ socket, sessionId }) => {
           variant="outlined"
           value={message}
           onChange={handleChatMessage}
-          fullWidth
         />
         <Button onClick={handleSendMessage}>Send</Button>
+        {roomUsers && <UsersList />}
       </div>
-      <UsersList />
     </>
   );
 };

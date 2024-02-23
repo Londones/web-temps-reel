@@ -18,7 +18,6 @@ function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { auth } = useAuth();
-  console.log(auth);
   const logout = useLogout();
   const pages = [];
 

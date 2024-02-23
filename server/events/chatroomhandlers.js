@@ -4,14 +4,16 @@ const handleJoinRoom = (io) => (sessionId, username) => {
   if (!roomUsers[sessionId]) {
     roomUsers[sessionId] = [];
   }
-  roomUsers[sessionId].push(username);
-  io.to(sessionId).emit("room-users", roomUsers[sessionId]);
+  if (!roomUsers[sessionId].includes(username)) {
+    roomUsers[sessionId].push(username);
+    io.to(sessionId).emit("room-users", roomUsers[sessionId]);
+  }
 };
 
 const handleMessage =
   (socket) =>
   ({ message, sessionId, username }) => {
-    socket.to(sessionId).emit("message", { message, username: username });
+    socket.to(sessionId).emit("chat-received", { message, username: username });
   };
 
 const handleDisconnect = (socket, io) => () => {

@@ -1,14 +1,16 @@
-import React from "react";
 import { useState } from "react";
 import Button from "@mui/material/Button";
 import ChatRoom from "./ChatRoom";
+import useAuth from "../hooks/useAuth";
 
-const JoinQuizComponent = ({ socket, sessionId }) => {
+const JoinQuizComponent = ({ socket, sessionId, handleJoin }) => {
   const [message, setMessage] = useState("");
+  const { auth } = useAuth();
 
   const joinQuiz = () => {
     if (sessionId) {
       socket.emit("join-room", sessionId);
+      handleJoin(true);
     } else {
       setMessage("No session ID to join");
     }
@@ -19,7 +21,6 @@ const JoinQuizComponent = ({ socket, sessionId }) => {
         Join Room
       </Button>
       {message && <p>{message}</p>}
-      {sessionId && <ChatRoom socket={socket} sessionId={sessionId} />}
     </>
   );
 };

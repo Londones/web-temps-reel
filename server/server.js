@@ -45,13 +45,17 @@ io.on("connection", (socket) => {
     console.log("New session created with ID:", sessionId);
   });
 
-  socket.on("join-room", (sessionId, username) => {
+  socket.on("join-room", (sessionId) => {
     socket.join(sessionId);
     console.log(`Socket ${socket.id} joined session ${sessionId}`);
     io.to(sessionId).emit(
       "response-join",
       `Bienvenue dans la session du quiz ${sessionId} !`
     );
+  });
+
+  socket.on("join-chat", (data) => {
+    const { sessionId, username } = data;
     handleJoinRoom(io)(sessionId, username);
   });
 
