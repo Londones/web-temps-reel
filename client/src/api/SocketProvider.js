@@ -23,29 +23,24 @@ class SocketInstance {
         this.socket.on("quiz-question-response", (data) => {  
             this.quizQuestionResponseCallback && this.quizQuestionResponseCallback(data);
          });
-        this.sessionId = null;
     }
     createRoomSession(sessionId, callback) {
-        if (this.sessionId) {
-            return callback({sessionId})
-        }
-        this.sessionId = sessionId;
         this.socket.emit("session-created", sessionId);
         this.socket.on("response-session-created", (data) => {
             callback(data);
         });
     }
-    joinRoom(quizId, callback) {
-        this.socket.emit("join-room", { sessionId: this.sessionId, quizId });
+    joinRoom(sessionId, callback) {
+        this.socket.emit("join-room", sessionId);
         this.socket.on("response-join", (data) => {
             callback(data);
         });
     }
-    listQuestion(quizId, usedQuestions) {
-        this.socket.emit("list-question", { sessionId: this.sessionId, quizId, usedQuestions });
+    listQuestion(sessionId, quizId, usedQuestions) {
+        this.socket.emit("list-question", { sessionId, quizId, usedQuestions });
     }
-    anwserQuestion(quizId, questionId, answers) {
-        this.socket.emit("answer-question", { sessionId: this.sessionId, quizId, questionId, answers });
+    anwserQuestion(sessionId, quizId, questionId, answers) {
+        this.socket.emit("answer-question", { sessionId, quizId, questionId, answers });
     }
     registerQuizQuestion(callback) {
         this.quizQuestionCallback = callback;
