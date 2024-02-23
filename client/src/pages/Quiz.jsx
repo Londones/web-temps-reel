@@ -1,22 +1,65 @@
-import { useState } from "react";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import Question from "../components/Question";
-import Container from "@mui/material/Container";
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from "react-router-dom";
+import { Typography } from '@mui/material';
+import { SocketProvider } from '../api/SocketProvider';
+import DisplayQuestion from '../components/DisplayQuestion';
 
 const Quiz = () => {
-    const [showFormQuestion, setShowFormQuestion] = useState(false);
+    const [message, setMessage] = useState("Loading...");
+    const [question, setQuestion] = useState(null);
+
     const { id } = useParams();
+    const effectRan = useRef(false);
+    const usedQuestions = [];
+
+    const handleAnswer = (answers) => {
+        console.log('handleAnswer', answers);
+        SocketProvider.anwserQuestion(id, question.id, answers);
+    }
+
+    const listQuestion = () => {
+        console.log('listQuestion', id, usedQuestions);
+        SocketProvider.listQuestion(id, usedQuestions);
+    }
+
+    useEffect(() => {    
+        const joinRoom = async () => {
+            SocketProvider.joinRoom(id, (response) => {
+                console.log('ok quiz', response);   
+                setMessage(response.message); 
+                listQuestion();
+            });
+            SocketProvider.registerQuizQuestion((data) => {
+                console.log('quiz-question', data.question);
+                if (data.quizId !== id) return;
+                if (data.question === null) return setMessage('No more questions!');
+                else {
+                    setQuestion(data.question);
+                    usedQuestions.push(data.question.id);
+                }
+            });
+            SocketProvider.registerQuizQuestionResponse((data) => {
+                console.log('quiz-question-response', data);
+                if (data.quizId !== id) return;
+                // if (data.hasCorrect) setMessage('Correct!');
+                // else setMessage('Incorrect!');
+                listQuestion();
+            });
+        }
+
+        if (!effectRan.current) joinRoom();
+
+        return () => effectRan.current = true;
+     }, []);
 
     return (
         <>
-            <Container component="main" maxWidth="xs">
-                <Box sx={{ marginTop: '10px'}}>
-                    <Button variant="contained" onClick={() => setShowFormQuestion(true)}>Add question</Button>
-                    {showFormQuestion && <Question quizId={id} />}
-                </Box>
-            </Container>
+            <div>
+                <Typography variant="h4" component="h2">{message}</Typography>
+                { question &&
+                    <DisplayQuestion question={question} sendAnswer={handleAnswer} />
+                }
+            </div>
         </>
     )
 }
