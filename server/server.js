@@ -50,6 +50,7 @@ io.on("connection", (socket) => {
     socket.emit("response-session-created", {sessionId: sessionId, quizzes: quizzes});
   });
 
+
   socket.on("join-room", async ({sessionId, quizId}) => {
     console.log("Join room with ID:", sessionId);
     if (!sessions.includes(sessionId)) {
@@ -66,6 +67,7 @@ io.on("connection", (socket) => {
     io.to(sessionId).emit("response-join", { message: `Bienvenue dans la session du quiz ${quizId} !` });
   });
 
+
   socket.on("list-question", async ({sessionId, quizId, usedQuestions}) => {
     if (!sessions.includes(sessionId)) {
       console.log("Session does not exist");
@@ -75,6 +77,7 @@ io.on("connection", (socket) => {
     const question = await getQuestionForQuiz(quizId, usedQuestions);
     io.to(sessionId).emit("quiz-question", { question, quizId });
   });
+
 
   socket.on("answer-question", async ({sessionId, quizId, questionId, answers}) => {
     if (!sessions.includes(sessionId)) {
