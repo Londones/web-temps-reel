@@ -77,6 +77,11 @@ export default function LoginForm() {
       setEmail("");
       setPassword("");
       navigateTo(from, { replace: true });
+      if (role === "admin") {
+        navigateTo("/admin", { replace: true });
+      } else if (role === "user") {
+        navigateTo("/user", { replace: true });
+      }
     } catch (error) {
       if (!error?.response) {
         setErrMsg("Erreur réseau");
