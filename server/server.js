@@ -34,6 +34,7 @@ const io = socketIo(server, {
   },
 });
 const sessions = [];
+const sessionQuiz = {};
 
 io.on("connection", (socket) => {
   console.log(`New client connected: ${socket.id}`);
@@ -44,13 +45,23 @@ io.on("connection", (socket) => {
       socket.emit("error", { error: 'SessionExisted!', sessionId: sessionId });
       return;
     }
+    sessions.push(sessionId);
     const quizzes = await getAllQuiz();
     //console.log("quizzes", quizzes);
-    sessions.push(sessionId);
-    socket.emit("response-session-created", {sessionId: sessionId, quizzes: quizzes});
+    socket.emit("response-session-created", {sessionId: sessionId, quizzes});
   });
-
-  socket.on("join-room", async ({sessionId, quizId}) => {
+  socket.on("add-quiz-session", async ({sessionId, quiz}) => {
+    if (!sessions.includes(sessionId)) {
+      console.log("Session does not exist");
+      socket.emit("error", { error: 'SessionNotFound!', sessionId: sessionId });
+      return;
+    }
+    console.log("Add quiz to session", sessionId, quiz);
+    sessionQuiz[sessionId] = sessionQuiz[sessionId] || [];
+    sessionQuiz[sessionId].push(quiz);
+    socket.emit("response-add-quiz", {sessionId, quiz});
+  });
+  socket.on("join-room", async (sessionId) => {
     console.log("Join room with ID:", sessionId);
     if (!sessions.includes(sessionId)) {
       console.log("Session does not exist");
@@ -62,8 +73,10 @@ io.on("connection", (socket) => {
       return;
     }
     socket.join(sessionId);
+    const quizzes = sessionQuiz[sessionId] || [];
+    //console.log("quizzes", quizzes);
     console.log(`Socket ${socket.id} joined session ${sessionId}`);
-    io.to(sessionId).emit("response-join", { message: `Bienvenue dans la session du quiz ${quizId} !` });
+    io.to(sessionId).emit("response-join", { quizzes, message: `Bienvenue dans la session ${sessionId} !` });
   });
 
   socket.on("list-question", async ({sessionId, quizId, usedQuestions}) => {

@@ -3,38 +3,35 @@ import { useParams } from "react-router-dom";
 import { Typography } from '@mui/material';
 import { SocketProvider } from '../api/SocketProvider';
 import DisplayQuestion from '../components/DisplayQuestion';
+import useAuth from "../hooks/useAuth";
 
 const Quiz = () => {
-    const [message, setMessage] = useState("Loading...");
+    const [message, setMessage] = useState("Bienvenu au Quiz!");
     const [question, setQuestion] = useState(null);
-
+    const { sessionQuiz } = useAuth();
     const { id } = useParams();
     const effectRan = useRef(false);
     const usedQuestions = [];
 
     const handleAnswer = (answers) => {
         console.log('handleAnswer', answers);
-        SocketProvider.anwserQuestion(id, question.id, answers);
+        SocketProvider.anwserQuestion(sessionQuiz, id, question.id, answers);
     }
 
     const listQuestion = () => {
         console.log('listQuestion', id, usedQuestions);
-        SocketProvider.listQuestion(id, usedQuestions);
+        SocketProvider.listQuestion(sessionQuiz, id, usedQuestions);
     }
 
     useEffect(() => {    
         const joinRoom = async () => {
-            SocketProvider.joinRoom(id, (response) => {
-                console.log('ok quiz', response);   
-                setMessage(response.message); 
-                listQuestion();
-            });
+            listQuestion();
             SocketProvider.registerQuizQuestion((data) => {
                 console.log('quiz-question', data.question);
+                setQuestion(data.question);
                 if (data.quizId !== id) return;
-                if (data.question === null) return setMessage('No more questions!');
+                else if (!data.question) return setMessage('No more questions!');
                 else {
-                    setQuestion(data.question);
                     usedQuestions.push(data.question.id);
                 }
             });
