@@ -22,7 +22,7 @@ const Home = () => {
             <Typography variant="h4" component="h2">Home</Typography>
             <TextField id="outlined-basic" label="Session ID" variant="outlined" onChange={(e) => setSessionQuiz(e.target.value)} />
             <Button color="secondary" variant="outlined" size="small" onClick={handleJoinSession}>Join session</Button>
-            {sessionQuiz && <QuizListComponent quizzes={quizzes} />}
+            {sessionQuiz && <QuizListComponent quizzes={quizzes} isAdmin={false} />}
         </div>
     );
 }
