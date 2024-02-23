@@ -24,7 +24,7 @@ const Home = () => {
 
     return (
         <div>
-            <Typography variant="h4" component="h2">Home</Typography>
+            <Typography variant="h4" component="h2" class="home">Home</Typography>
             {sessionId && <p>Session ID: {sessionId}</p>}
             {setSessionId && <QuizListComponent quizzes={quizzes} />}
         </div>

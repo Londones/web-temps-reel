@@ -21,7 +21,7 @@ const JoinQuizCard = ({ quiz, joinQuiz }) => {
             </CardContent>
             <CardActions>
                 <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                    <Button size="small" variant="contained" onClick={handleJoinQuiz}>Start quiz</Button>
+                    <Button size="small" variant="contained" onClick={handleJoinQuiz} style={{backgroundColor : "rgb(63, 81, 181)"}}>Start quiz</Button>
                 </Box>
             </CardActions>
         </Card>

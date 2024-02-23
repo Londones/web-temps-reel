@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 const AdminDashboard = () => {
     return (
         <div>
-            <Typography variant="h4" component="h2">Admin Dashboard</Typography>
+            <Typography variant="h4" component="h2" class="admin-dashboard">Admin Dashboard</Typography>
             <FormCreateQuiz />
         </div>
     );
