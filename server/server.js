@@ -18,6 +18,8 @@ const RefreshRoutes = require("./routes/RefreshRoutes");
 const QuizRoutes = require("./routes/QuizRoutes");
 const QuestionRoutes = require("./routes/QuestionRoutes");
 
+const { getAllQuiz, getQuestionForQuiz, checkAnswerForQuestion } = require("./controllers/QuizController");
+
 app.use("/auth", AuthRoutes);
 app.use("/refresh", RefreshRoutes);
 app.use("/quiz", QuizRoutes);
@@ -31,19 +33,57 @@ const io = socketIo(server, {
     credentials: true,
   },
 });
+const sessions = [];
 
 io.on("connection", (socket) => {
   console.log(`New client connected: ${socket.id}`);
 
-
-  socket.on("session-created", (sessionId) => {
-    console.log("New session created with ID:", sessionId);
+  socket.on("session-created", async (sessionId) => {
+    if (sessions.includes(sessionId)) {
+      console.log("Session already exists");
+      socket.emit("error", { error: 'SessionExisted!', sessionId: sessionId });
+      return;
+    }
+    const quizzes = await getAllQuiz();
+    //console.log("quizzes", quizzes);
+    sessions.push(sessionId);
+    socket.emit("response-session-created", {sessionId: sessionId, quizzes: quizzes});
   });
 
-  socket.on("join-room", (sessionId) => {
+  socket.on("join-room", async ({sessionId, quizId}) => {
+    console.log("Join room with ID:", sessionId);
+    if (!sessions.includes(sessionId)) {
+      console.log("Session does not exist");
+      socket.emit("error", { error: 'SessionNotFound!', sessionId: sessionId });
+      return;
+    } else if (socket.rooms.has(sessionId)) {
+      console.log("Socket already joined session");
+      socket.emit("error", { error: 'AlreadyJoined!', sessionId: sessionId });
+      return;
+    }
     socket.join(sessionId);
     console.log(`Socket ${socket.id} joined session ${sessionId}`);
-    io.to(sessionId).emit("response-join", `Bienvenue dans la session du quiz ${sessionId} !`);
+    io.to(sessionId).emit("response-join", { message: `Bienvenue dans la session du quiz ${quizId} !` });
+  });
+
+  socket.on("list-question", async ({sessionId, quizId, usedQuestions}) => {
+    if (!sessions.includes(sessionId)) {
+      console.log("Session does not exist");
+      socket.emit("error", { error: 'SessionNotFound!', sessionId: sessionId });
+      return;
+    }
+    const question = await getQuestionForQuiz(quizId, usedQuestions);
+    io.to(sessionId).emit("quiz-question", { question, quizId });
+  });
+
+  socket.on("answer-question", async ({sessionId, quizId, questionId, answers}) => {
+    if (!sessions.includes(sessionId)) {
+      console.log("Session does not exist");
+      socket.emit("error", { error: 'SessionNotFound!', sessionId: sessionId });
+      return;
+    }
+    const hasCorrect = await checkAnswerForQuestion(quizId, questionId, answers);
+    io.to(sessionId).emit("quiz-question-response", { hasCorrect, quizId, questionId });
   });
 
   socket.on("disconnect", () => {
