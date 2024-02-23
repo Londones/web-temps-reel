@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 import { Avatar, Button, Chip, TextField } from "@mui/material";
+import { SocketProvider } from "../api/SocketProvider";
 
-const ChatRoom = ({ socket, sessionId }) => {
+const ChatRoom = ({ sessionId }) => {
+  const { socket } = SocketProvider;
   const { auth } = useAuth();
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [roomUsers, setRoomUsers] = useState([]);
 
   useEffect(() => {
-    socket.emit("join-chat", { sessionId, username: auth.username });
-
     const handleChatReceived = (data) => {
       console.log("Message received", data);
       setMessages((messages) => [...messages, data]);
@@ -21,8 +21,12 @@ const ChatRoom = ({ socket, sessionId }) => {
       setRoomUsers(users);
     };
 
-    socket.on("chat-received", handleChatReceived);
-    socket.on("room-users", handleRoomUsers);
+    SocketProvider.joinChat(
+      sessionId,
+      auth.username,
+      handleChatReceived,
+      handleRoomUsers
+    );
 
     return () => {
       socket.disconnect();
@@ -31,7 +35,8 @@ const ChatRoom = ({ socket, sessionId }) => {
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    socket.emit("message", { message, sessionId, username: auth.username });
+    console.log("Sending message", message);
+    SocketProvider.sendMessage(message, sessionId, auth.username);
     setMessage("");
   };
 

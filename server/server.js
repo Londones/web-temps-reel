@@ -79,6 +79,15 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("join-chat", ({ sessionId, username }) => {
+    handleJoinRoom(io)(sessionId, username);
+  });
+
+  socket.on("chat-message", ({ message, sessionId, username }) => {
+    console.log("Chat message received", message);
+    handleMessage(socket)({ message, sessionId, username });
+  });
+
   socket.on("list-question", async ({ sessionId, quizId, usedQuestions }) => {
     if (!sessions.includes(sessionId)) {
       console.log("Session does not exist");
