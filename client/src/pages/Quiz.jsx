@@ -31,10 +31,10 @@ const Quiz = () => {
             });
             SocketProvider.registerQuizQuestion((data) => {
                 console.log('quiz-question', data.question);
+                setQuestion(data.question);
                 if (data.quizId !== id) return;
-                if (data.question === null) return setMessage('No more questions!');
+                else if (!data.question) return setMessage('No more questions!');
                 else {
-                    setQuestion(data.question);
                     usedQuestions.push(data.question.id);
                 }
             });
