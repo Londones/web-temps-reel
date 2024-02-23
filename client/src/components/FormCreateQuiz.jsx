@@ -4,17 +4,36 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography";
-import CardQuiz from "./CardQuiz";
+import axiosPrivate from '../api/axios';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import CardQuiz from './CardQuiz';
 
 const FormCreateQuiz = () => {
     const [quizzes, setQuizzes] = useState([]);
     const [quiz, setQuiz] = useState({ title: '', description: '' });
     const [newQuiz, setNewQuiz] = useState(null);
+    const [open, setOpen] = useState(false);
+
+    const handleSuccess = () => {
+        setOpen(true);
+    };
+    
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setQuizzes([...quizzes, quiz]);
-        setQuiz({ title: '', description: '' });
+        const newQuiz = await axiosPrivate.post('/quiz/create', quiz);
+        if (newQuiz) {
+            setQuizzes([...quizzes, newQuiz.data.quiz]);
+            setQuiz({ title: '', description: '' });
+            handleSuccess();
+        }
         
     }
 
@@ -36,6 +55,16 @@ const FormCreateQuiz = () => {
         <>
             <Typography variant="h4" component="h2">Create Quiz</Typography>
             <Container component="main" maxWidth="xs">
+                <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+                <Alert
+                    onClose={handleClose}
+                    severity="success"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    Quiz created successfully !
+                </Alert>
+                </Snackbar>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField
                         margin="normal"

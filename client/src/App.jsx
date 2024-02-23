@@ -6,14 +6,13 @@ import RegisterForm from "./components/RegisterForm";
 import Layout from "./layout/Layout";
 import Home from "./pages/Home";
 import AdminDashboard from "./pages/AdminDashboard";
-import "./App.css";
 import Quiz from "./pages/Quiz";
 import PersistLogin from "./auth/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
 
 function App() {
   const { auth } = useAuth();
-
+  
   return (
     <Router>
       <Routes>
@@ -25,7 +24,7 @@ function App() {
               element={<RequireAuth allowedRoles={"admin"} />}
             >
               <Route path="dashboard" element={<AdminDashboard />} />
-              <Route path="quiz" element={<Quiz />} />
+              <Route path="quiz/:id" element={<Quiz />} />
             </Route>
           </Route>
         </Route>
