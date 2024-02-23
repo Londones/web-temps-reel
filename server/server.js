@@ -45,17 +45,19 @@ io.on("connection", (socket) => {
     console.log("New session created with ID:", sessionId);
   });
 
-  socket.on("join-room", (sessionId) => {
+  socket.on("join-room", (sessionId, username) => {
     socket.join(sessionId);
     console.log(`Socket ${socket.id} joined session ${sessionId}`);
     io.to(sessionId).emit(
       "response-join",
       `Bienvenue dans la session du quiz ${sessionId} !`
     );
-    handleJoinRoom(socket, io);
+    handleJoinRoom(io)(sessionId, username);
   });
 
-  socket.on("message", handleMessage(socket, io));
+  socket.on("message", (data) => {
+    handleMessage(socket)(data);
+  });
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");

@@ -1,7 +1,6 @@
 let roomUsers = {};
 
-const handleJoinRoom = (socket, io) => (sessionId, username) => {
-  socket.join(sessionId);
+const handleJoinRoom = (io) => (sessionId, username) => {
   if (!roomUsers[sessionId]) {
     roomUsers[sessionId] = [];
   }
@@ -10,9 +9,9 @@ const handleJoinRoom = (socket, io) => (sessionId, username) => {
 };
 
 const handleMessage =
-  (socket, io) =>
+  (socket) =>
   ({ message, sessionId, username }) => {
-    socket.to(sessionId).emit("message", { message, user: username });
+    socket.to(sessionId).emit("message", { message, username: username });
   };
 
 const handleDisconnect = (socket, io) => () => {
