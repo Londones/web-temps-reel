@@ -54,7 +54,7 @@ const Quiz = () => {
     return (
         <>
             <div>
-                <Typography variant="h4" component="h2">{message}</Typography>
+                <Typography variant="h4" component="h2" class="home" style={{marginTop : '2%'}}>{message}</Typography>
                 { question &&
                     <DisplayQuestion question={question} hasCorrect={hasCorrect} sendAnswer={handleAnswer} />
                 }

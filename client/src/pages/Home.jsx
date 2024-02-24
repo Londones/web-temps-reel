@@ -77,7 +77,9 @@ const Home = () => {
               style={{ color: "white", fontSize: "1.5em", marginTop: "1em"}}
             >
               Pick the Session's Quiz
+
             </Typography>
+            <Alert severity="warning"  style={{margin : '1rem', width : 'fit-content', margin : 'auto'}}>Make sur to share the session's code before starting the Quiz.</Alert>
             <QuizListComponent
               quizzes={quizzes}
               isAdmin={true}

@@ -98,7 +98,6 @@ io.on("connection", (socket) => {
       return;
     }
     socket.join(sessionId);
-    //console.log("quizzes", quizzes);
     console.log(`Socket ${socket.id} joined session ${sessionId}`);
     io.to(sessionId).emit("response-join", {
       sessionId: sessionId,
@@ -125,14 +124,18 @@ io.on("connection", (socket) => {
    * list question for a quiz
    */
   socket.on("list-question", async ({ sessionId, quizId, usedQuestions }) => {
-    startQuestionTimer(); // Démarre le timer de la question
     if (!sessions.includes(sessionId)) {
       console.log("Session does not exist");
       socket.emit("error", { error: "SessionNotFound!", sessionId: sessionId });
       return;
     }
     const question = await getQuestionForQuiz(quizId, usedQuestions);
+   
     io.to(sessionId).emit("quiz-question", { question, quizId });
+    if(question != null) {
+      startQuestionTimer(sessionId);
+    }
+
   });
 
   /**
@@ -141,6 +144,7 @@ io.on("connection", (socket) => {
   socket.on(
     "answer-question",
     async ({ sessionId, quizId, questionId, answers }) => {
+      
       if (!sessions.includes(sessionId)) {
         console.log("Session does not exist");
         socket.emit("error", {
@@ -149,11 +153,14 @@ io.on("connection", (socket) => {
         });
         return;
       }
+      
       const hasCorrect = await checkAnswerForQuestion(
         quizId,
         questionId,
         answers
       );
+      clearInterval(timerInterval);
+
       io.to(sessionId).emit("quiz-question-response", {
         hasCorrect,
         quizId,
@@ -161,6 +168,7 @@ io.on("connection", (socket) => {
       });
     }
   );
+
 
   /**
    * Disconnect
@@ -180,22 +188,21 @@ io.on("connection", (socket) => {
   });
 });
 
-function startQuestionTimer() {
+
+function startQuestionTimer(sessionId) {
   clearInterval(timerInterval);
   timerValue = TIMER_DURATION;
   timerInterval = setInterval(() => {
     if (timerValue > 0) {
+      console.log("timerValue", timerValue);
       timerValue--;
-      io.emit("timer-dec", timerValue);
+      io.to(sessionId).emit("timer-dec", timerValue);
     } else {
-      stopQuestionTimer();
+      console.log("Time's up!");
+      io.to(sessionId).emit("times-up")
+      clearInterval(timerInterval);
     }
   }, 1000);
-}
-
-function stopQuestionTimer() {
-  clearInterval(timerInterval);
-  io.emit("question-timeout");
 }
 
 const PORT = process.env.PORT || 3000;

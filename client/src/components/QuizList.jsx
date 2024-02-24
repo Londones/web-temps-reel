@@ -1,38 +1,20 @@
 import React, { useEffect, useState } from "react";
 import JoinQuizCard from "./JoinQuizCard";
-import io from "socket.io-client";
+import { SocketProvider } from "../api/SocketProvider";
 
 const QuizListComponent = ({ quizzes, addQuiz, isAdmin }) => {
   const [message, setMessage] = useState("");
-  const socket = io("http://localhost:3000");
+  const { socket } = SocketProvider;
   const [timer, setTimer] = useState(0);
 
  const handleAddQuiz = (quiz) => {
   addQuiz(quiz);
  }
 
- useEffect(() => {
-  if (socket) {
-    socket.on("question-timeout", () => {
-      console.log("question-timeout");
-      setMessage("Le temps pour répondre à la question est écoulé !");
-    });
-
-    socket.on("timer-dec", (data) => {
-      setTimer(data);
-      console.log(timer);
-    });
-  }
-  return () => {
-    if (socket) {
-      socket.off("question-timeout");
-    }
-  };
-}, [socket]);
 
 return (
   <>
-    {timer > 0 && <p>Temps restant: {timer} secondes</p>}
+    {/* {timer > 0 && <p>Temps restant: {timer} secondes</p>} */}
     {message && <p>{message}</p>}
     <div class="quizzes">
       {quizzes.map((quiz, i) => (

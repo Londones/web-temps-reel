@@ -147,3 +147,20 @@ html {
   border-radius: 4px;
   padding: 7px;
 }
+
+.display-question-card {
+  box-shadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px";
+  padding : 4rem;
+  border-radius : "10px";
+  width: 20rem;
+  margin: auto;
+  background-color: white;
+  color: black;
+  border-radius: 12px;
+
+}
+
+.question-options {
+  display: flex ;
+  flex-direction: column;
+}
