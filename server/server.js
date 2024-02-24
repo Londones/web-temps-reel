@@ -131,7 +131,12 @@ io.on("connection", (socket) => {
       return;
     }
     const question = await getQuestionForQuiz(quizId, usedQuestions);
+   
     io.to(sessionId).emit("quiz-question", { question, quizId });
+    if(question != null) {
+      startQuestionTimer(sessionId);
+    }
+
   });
 
   /**
@@ -140,6 +145,7 @@ io.on("connection", (socket) => {
   socket.on(
     "answer-question",
     async ({ sessionId, quizId, questionId, answers }) => {
+      
       if (!sessions.includes(sessionId)) {
         console.log("Session does not exist");
         socket.emit("error", {
@@ -148,11 +154,14 @@ io.on("connection", (socket) => {
         });
         return;
       }
+      
       const hasCorrect = await checkAnswerForQuestion(
         quizId,
         questionId,
         answers
       );
+      clearInterval(timerInterval);
+
       io.to(sessionId).emit("quiz-question-response", {
         hasCorrect,
         quizId,
@@ -162,10 +171,10 @@ io.on("connection", (socket) => {
   );
 
 
-  socket.on('start-timer', () => {  
-    console.log('timer started !!!!!!!!!!!!');
-    startQuestionTimer(); 
-  });
+  // socket.on('start-timer', () => {  
+  //   console.log('timer started !!!!!!!!!!!!');
+  //   startQuestionTimer(); 
+  // });
   /**
    * Disconnect
    */
@@ -185,23 +194,20 @@ io.on("connection", (socket) => {
 });
 
 
-function startQuestionTimer() {
+function startQuestionTimer(sessionId) {
   clearInterval(timerInterval);
   timerValue = TIMER_DURATION;
   timerInterval = setInterval(() => {
     if (timerValue > 0) {
       console.log("timerValue", timerValue);
       timerValue--;
-      io.emit("timer-dec", timerValue);
+      io.to(sessionId).emit("timer-dec", timerValue);
     } else {
-      stopQuestionTimer();
+      console.log("Time's up!");
+      io.to(sessionId).emit("times-up")
+      clearInterval(timerInterval);
     }
   }, 1000);
-}
-
-function stopQuestionTimer() {
-  clearInterval(timerInterval);
-  io.emit("question-timeout");
 }
 
 const PORT = process.env.PORT || 3000;
