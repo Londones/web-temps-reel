@@ -5,11 +5,11 @@ import {
   Card,
   Chip,
   TextField,
-  MuiAlert,
   Snackbar,
   AlertTitle,
 } from "@mui/material";
 import { SocketProvider } from "../api/SocketProvider";
+import MuiAlert from "@mui/material/Alert";
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;

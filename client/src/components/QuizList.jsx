@@ -20,7 +20,7 @@ const QuizListComponent = ({ quizzes, addQuiz, isAdmin }) => {
   };
   return (
     <>
-      <div class="quizzes">
+      <div className="quizzes">
         {quizzes.map((quiz, i) => (
           <JoinQuizCard
             class="quiz-card"
