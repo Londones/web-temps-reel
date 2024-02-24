@@ -39,6 +39,10 @@ const io = socketIo(server, {
 });
 const sessions = [];
 const sessionQuiz = {};
+const TIMER_DURATION = 30;
+
+let timerInterval;
+let timerValue = TIMER_DURATION;
 
 const {
   handleJoinRoom,
@@ -49,6 +53,9 @@ const {
 io.on("connection", (socket) => {
   console.log(`New client connected: ${socket.id}`);
 
+  /**
+   * Create a new session
+   */
   socket.on("session-created", async (sessionId) => {
     if (sessions.includes(sessionId)) {
       console.log("Session already exists");
@@ -57,9 +64,12 @@ io.on("connection", (socket) => {
     }
     sessions.push(sessionId);
     const quizzes = await getAllQuiz();
-    //console.log("quizzes", quizzes);
     socket.emit("response-session-created", { sessionId: sessionId, quizzes });
   });
+
+  /**
+   * Add a quiz to a session
+   */
   socket.on("add-quiz-session", async ({ sessionId, quiz }) => {
     if (!sessions.includes(sessionId)) {
       console.log("Session does not exist");
@@ -71,6 +81,10 @@ io.on("connection", (socket) => {
     sessionQuiz[sessionId].push(quiz);
     socket.emit("response-add-quiz", { sessionId, quiz });
   });
+
+  /**
+   * Join a session
+   */
   socket.on("join-room", async (sessionId) => {
     console.log("Join room with ID:", sessionId);
     if (!sessions.includes(sessionId)) {
@@ -100,7 +114,11 @@ io.on("connection", (socket) => {
     handleMessage(io)({ message, sessionId, username });
   });
 
+  /**
+   * list question for a quiz
+   */
   socket.on("list-question", async ({ sessionId, quizId, usedQuestions }) => {
+    startQuestionTimer(); // Démarre le timer de la question
     if (!sessions.includes(sessionId)) {
       console.log("Session does not exist");
       socket.emit("error", { error: "SessionNotFound!", sessionId: sessionId });
@@ -134,17 +152,68 @@ io.on("connection", (socket) => {
     }
   );
 
+  /**
+   * Answer a question
+   */
+  socket.on(
+    "answer-question",
+    async ({ sessionId, quizId, questionId, answers }) => {
+      if (!sessions.includes(sessionId)) {
+        console.log("Session does not exist");
+        socket.emit("error", {
+          error: "SessionNotFound!",
+          sessionId: sessionId,
+        });
+        return;
+      }
+      const hasCorrect = await checkAnswerForQuestion(
+        quizId,
+        questionId,
+        answers
+      );
+      io.to(sessionId).emit("quiz-question-response", {
+        hasCorrect,
+        quizId,
+        questionId,
+      });
+    }
+  );
+
+  /**
+   * Disconnect
+   */
   socket.on("disconnect", () => {
     console.log("Client disconnected");
     handleDisconnect(socket, io);
   });
 
+  /**
+   * Error
+   */
   socket.on("connect_error", (err) => {
     console.log(err.message);
     console.log(err.description);
     console.log(err.context);
   });
 });
+
+function startQuestionTimer() {
+  clearInterval(timerInterval);
+  timerValue = TIMER_DURATION;
+  timerInterval = setInterval(() => {
+    if (timerValue > 0) {
+      timerValue--;
+      io.emit("timer-dec", timerValue);
+    } else {
+      stopQuestionTimer();
+    }
+  }, 1000);
+}
+
+function stopQuestionTimer() {
+  clearInterval(timerInterval);
+  io.emit("question-timeout");
+}
 
 const PORT = process.env.PORT || 3000;
 

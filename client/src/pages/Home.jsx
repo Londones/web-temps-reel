@@ -7,6 +7,7 @@ const Home = () => {
   const [sessionId, setSessionId] = useState(null);
   const [quizzes, setQuizzes] = useState([]);
   const [showCreateQuiz, setShowCreateQuiz] = useState(false);
+  const userName = localStorage.getItem("userName") || "";
 
   const handleCreateSession = () => {
     let newSessionId = Math.random().toString(36).substring(2, 15);
@@ -34,35 +35,52 @@ const Home = () => {
 
   return (
     <div>
-      <Typography variant="h4" component="h2" class="home">
-        Home
-      </Typography>
-      <Button
-        color="secondary"
-        variant="outlined"
-        size="small"
-        onClick={handleCreateSession}
+      <Typography
+        variant="h4"
+        component="h2"
+        className="home"
+        style={{ color: "white", marginTop: "4em", fontSize: "2.5em" }}
       >
-        Create new session
-      </Button>
-      {sessionId && <p>Session ID: {sessionId}</p>}
-      {sessionId && (
+        Hi <i>{userName}</i> ! Welcome here !
+      </Typography>
+      <div className="create-session-card">
         <Button
           color="secondary"
           variant="outlined"
           size="small"
-          onClick={handleCreateQuiz}
+          onClick={handleCreateSession}
         >
-          Select quiz for session
+          Create new session
         </Button>
-      )}
-      {showCreateQuiz && (
-        <QuizListComponent
-          quizzes={quizzes}
-          isAdmin={true}
-          addQuiz={handleAddQuiz}
-        />
-      )}
+        {sessionId && <p>Session ID: {sessionId}</p>}
+        {sessionId && (
+          <Button
+            color="secondary"
+            variant="outlined"
+            size="small"
+            onClick={handleCreateQuiz}
+          >
+            Select quiz for session
+          </Button>
+        )}
+      </div>
+      <div>
+        <Typography
+          variant="h4"
+          component="h2"
+          className="home"
+          style={{ color: "white", "font-size": "1.5em" }}
+        >
+          Pick the Session's Quiz
+        </Typography>
+        {showCreateQuiz && (
+          <QuizListComponent
+            quizzes={quizzes}
+            isAdmin={true}
+            addQuiz={handleAddQuiz}
+          />
+        )}
+      </div>
     </div>
   );
 };
