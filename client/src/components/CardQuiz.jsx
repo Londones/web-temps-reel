@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 const CardQuiz = ({ quiz }) => {
   return (
     <Card
-      sx={{ width: "35%" }}
+      sx={{ width: "30%" }}
       style={{
         boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
         padding: "6rem 0rem",
