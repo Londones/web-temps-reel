@@ -17,31 +17,33 @@ const DisplayQuestion = ({ question, sendAnswer }) => {
         setSelectedOptions([]);
     }
 
-    useEffect(() => { 
+    useEffect(() => {
         console.log("question", question);
-     }, []);
+    }, []);
 
     return (
-        <div>
-            <Card sx={{ width: '25%', margin: '0 1rem 1rem' }} style={{ "boxShadow": "rgba(149, 157, 165, 0.2) 0px 8px 24px", "padding": "6rem 2rem", "borderRadius": "10px" }}>
+        <div class="display-question-card">
+            <Card sx={{ width: '100%', margin: '0 1rem 1rem', boxShadow: 'none' }}>
                 <CardContent>
-                    { question &&
+                    {question &&
                         <Typography variant="h5" component="div" sx={{ mb: 1 }}>
                             {question.question}
                         </Typography>
                     }
-                    {question.options.map((option, i) => (
-                        <FormControlLabel
-                            key={i}
-                            control={<Checkbox
-                                checked={selectedOptions.includes(option)}
-                                onChange={(e) => handleOptionChange(e, option)}
-                                name={option}
-                                color="primary"
-                            />}
-                            label={option}
-                        />
-                    ))}
+                    <div className='question-options'>
+                        {question.options.map((option, i) => (
+                            <FormControlLabel
+                                key={i}
+                                control={<Checkbox
+                                    checked={selectedOptions.includes(option)}
+                                    onChange={(e) => handleOptionChange(e, option)}
+                                    name={option}
+                                    color="primary"
+                                />}
+                                label={option}
+                            />
+                        ))}
+                    </div>
                 </CardContent>
                 <Button color="secondary" variant="outlined" size="small" onClick={handleAnswer}>Send</Button>
             </Card>
