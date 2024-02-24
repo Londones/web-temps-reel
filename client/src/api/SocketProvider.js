@@ -16,6 +16,9 @@ class SocketInstance {
     this.socket.on("error", (data) => {
       console.log("error", data);
     });
+    this.socket.on("start-quiz-session", (data) => {
+        this.quizSessionStartedCallback && this.quizSessionStartedCallback(data);
+    });
     this.socket.on("quiz-question", (data) => {
       this.quizQuestionCallback && this.quizQuestionCallback(data);
     });
@@ -42,6 +45,9 @@ class SocketInstance {
       callback(data);
     });
   }
+  quitRoom(sessionId) {
+    this.socket.emit("quit-room", sessionId);
+  }
   listQuestion(sessionId, quizId, usedQuestions) {
     this.socket.emit("list-question", { sessionId, quizId, usedQuestions });
   }
@@ -52,6 +58,9 @@ class SocketInstance {
       questionId,
       answers,
     });
+  }
+  registerQuizSessionStarted(callback) {
+    this.quizSessionStartedCallback = callback;
   }
   registerQuizQuestion(callback) {
     this.quizQuestionCallback = callback;

@@ -1,11 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import { Typography, Button, TextField } from "@mui/material";
-import QuizListComponent from "../components/QuizList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SocketProvider } from "../api/SocketProvider";
 import useAuth from "../hooks/useAuth";
 import ChatRoom from "../components/ChatRoom";
 
 const Home = () => {
+  const navigate = useNavigate();
   const [quizzes, setQuizzes] = useState([]);
   const { sessionQuiz, setSessionQuiz, auth } = useAuth();
   const [sessionId, setSessionId] = useState(null);
@@ -13,15 +14,28 @@ const Home = () => {
 
   const handleJoinSession = () => {
     SocketProvider.joinRoom(sessionQuiz, (data) => {
-      setSessionQuiz(sessionQuiz);
+      console.log("joinRoom ok", data, sessionQuiz);
+      setSessionQuiz(data.sessionId);
       setQuizzes(data.quizzes);
       setSessionId(sessionQuiz);
     });
   };
 
+  const handleTextChange = (newValue) => {
+    console.log("handleTextChange", newValue);
+    setSessionQuiz(newValue);
+  }
+
   const handleOpenChat = () => {
     setShowChat(!showChat); 
   };
+
+  SocketProvider.registerQuizSessionStarted((data) => {
+    console.log("quiz-session-started", data, sessionQuiz, sessionId);
+    if (data.sessionId === sessionQuiz && data.quizId) {
+      navigate(`/displayQuiz/${data.quizId}`);
+    }
+  });
 
   return (
     <div>
@@ -47,7 +61,7 @@ const Home = () => {
             id="outlined-basic"
             label="Session ID"
             variant="outlined"
-            onChange={(e) => setSessionQuiz(e.target.value)}
+            onChange={(e) => handleTextChange(e.target.value)}
           />
           <Button
             color="secondary"
@@ -60,7 +74,6 @@ const Home = () => {
           </Button>
         </div>
       )}
-      {sessionQuiz && <QuizListComponent quizzes={quizzes} isAdmin={false} />}
       {sessionId && (
         <>
           <a onClick={handleOpenChat} style={{ cursor: "pointer", position: 'absolute', right: '3%', bottom: '4%' }}>
