@@ -63,7 +63,14 @@ function ResponsiveAppBar() {
     } else if (auth?.role === "user") {
       navigate("/user");
     } else {
-      navigate("/login");
+      const currentPath = window.location.pathname;
+      const pathSegments = currentPath.split('/');
+      const lastSegment = pathSegments[pathSegments.length - 1];
+      if(lastSegment == "register"){
+        navigate("/register");
+      }else{
+        navigate("/login");
+      }
     }
   }, [auth, navigate]);
 
