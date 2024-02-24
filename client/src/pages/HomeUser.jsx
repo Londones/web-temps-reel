@@ -43,10 +43,19 @@ const Home = () => {
         variant="h4"
         component="h2"
         class="home"
-        style={{ color: "white", marginTop: "4em", fontSize: "2.5em" }}
+        style={{ color: "white", marginTop: "2em", fontSize: "2.5em" }}
       >
         Hi <i>{auth?.username}</i> ! Welcome here !
       </Typography>
+      { sessionId &&
+      <Typography
+        variant="h2"
+        component="h1"
+        class="home"
+      >
+        Wait for the quiz to start
+      </Typography>
+      }
       {!sessionId && (
         <div class="join-session-card">
           <Typography
