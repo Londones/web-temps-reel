@@ -91,11 +91,11 @@ const ChatRoom = ({ sessionId }) => {
             fontWeight: "bold",
           }}
         >
-          Users in the room
+          In the room
         </p>
         <div>
           {roomUsers.map((user, index) => (
-            <div key={index}>{user}</div>
+            <div key={index}>🟢{user}</div>
           ))}
         </div>
       </div>
@@ -107,6 +107,9 @@ const ChatRoom = ({ sessionId }) => {
       style={{
         display: "flex",
         justifyContent: "flex-end",
+        position: "absolute",
+        right: "7%",
+        bottom: "12%"
       }}
     >
       <Card
@@ -187,11 +190,12 @@ const ChatRoom = ({ sessionId }) => {
                 value={message}
                 onChange={handleChatMessage}
               />
-              <Button onClick={handleSendMessage}>Send</Button>
+              <Button color="secondary"  variant="outlined" onClick={handleSendMessage}>Send</Button>
             </div>
           </div>
-          {roomUsers && <UsersList />}
         </div>
+        <hr style={{'color' : '#f6f6f6', 'marginTop': '15px', 'width': '72%' }}/>
+        {roomUsers && <UsersList />}
       </Card>
     </div>
   );

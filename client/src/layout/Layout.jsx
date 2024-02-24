@@ -2,22 +2,22 @@ import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import LoginForm from "../components/LoginForm";
 import AppTopBar from "./AppTopBar";
+import useAuth from "../hooks/useAuth";
+
 
 export default function Layout() {
     const navigate = useNavigate();
-    const [userState, setUserState] = useState(false);
+    const { auth } = useAuth();
 
     useEffect(() => {
-        const userConnected = JSON.parse(localStorage.getItem('userConnected'));
-        setUserState(userConnected);
-        if (!userConnected) {
+        if (!auth) {
             navigate('/login');
         }
     }, [navigate]);
 
     return (
         <>
-            {userState ? <AppTopBar /> : <LoginForm />}
+            {auth ? <AppTopBar /> : <LoginForm />}
             <Outlet />
         </>
     );
