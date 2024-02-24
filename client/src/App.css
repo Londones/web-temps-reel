@@ -149,15 +149,15 @@ html {
 }
 
 .display-question-card {
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px !important;
-  padding: 6rem 2rem;
-  border-radius: 10px;
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%);
+  box-shadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px";
+  padding : 4rem;
+  border-radius : "10px";
+  width: 20rem;
+  margin: auto;
+  background-color: white;
   color: black;
-  padding: 5rem;
+  border-radius: 12px;
+
 }
 
 .question-options {

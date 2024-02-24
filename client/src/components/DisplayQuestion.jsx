@@ -5,6 +5,7 @@ import { SocketProvider } from "../api/SocketProvider";
 const DisplayQuestion = ({ question, sendAnswer, hasCorrect }) => {
     const [selectedOptions, setSelectedOptions] = useState([]);
     const { socket } = SocketProvider;
+    const [timer, setTimer] = useState(0);
 
     const handleOptionChange = (e, option) => {
         if (e.target.checked) {
@@ -21,14 +22,15 @@ const DisplayQuestion = ({ question, sendAnswer, hasCorrect }) => {
 
     useEffect(() => {
         console.log("question", question);
-        SocketProvider.startTimer()
+        SocketProvider.createTimer((data) => { setTimer(data) });
     }, []);
 
     return (
-        <div class="display-question-card">
-            <Card sx={{ width: '100%', margin: '0 1rem 1rem' }} style={{ "boxShadow": "rgba(149, 157, 165, 0.2) 0px 8px 24px", "padding": "6rem 2rem", "borderRadius": "10px" }}>
-                { hasCorrect === true && <Alert severity="success">Correct!</Alert> }
-                { hasCorrect === false && <Alert severity="error">Incorrect!</Alert> }
+        <div class='center'>
+            {timer > 0 && <p>Temps restant: {timer} secondes</p>}
+            <Card class="display-question-card">
+                {hasCorrect === true && <Alert severity="success">Correct!</Alert>}
+                {hasCorrect === false && <Alert severity="error">Incorrect!</Alert>}
                 <CardContent>
                     {question &&
                         <Typography variant="h5" component="div" sx={{ mb: 1 }}>
@@ -50,7 +52,7 @@ const DisplayQuestion = ({ question, sendAnswer, hasCorrect }) => {
                         ))}
                     </div>
                 </CardContent>
-                <Button color="secondary" variant="outlined" size="small" onClick={handleAnswer}>Send</Button>
+                <Button id="button-send-answer" color="secondary" variant="outlined" size="small" onClick={handleAnswer}>Send</Button>
             </Card>
         </div>
     )

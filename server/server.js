@@ -80,6 +80,7 @@ io.on("connection", (socket) => {
     sessionQuiz[sessionId] = sessionQuiz[sessionId] || [];
     sessionQuiz[sessionId].push(quiz);
     socket.emit("response-add-quiz", { sessionId, quiz });
+    socket.to(sessionId).emit("start-quiz-session", { sessionId, quizId: quiz.id });
   });
 
   /**
@@ -97,13 +98,19 @@ io.on("connection", (socket) => {
       return;
     }
     socket.join(sessionId);
-    const quizzes = sessionQuiz[sessionId] || [];
     //console.log("quizzes", quizzes);
     console.log(`Socket ${socket.id} joined session ${sessionId}`);
     io.to(sessionId).emit("response-join", {
-      quizzes,
+      sessionId: sessionId,
       message: `Bienvenue dans la session ${sessionId} !`,
     });
+  });
+
+  socket.on("quit-room", (sessionId) => {
+    if (socket.rooms.has(sessionId)) {
+      socket.leave(sessionId);
+    }
+    console.log(`Socket ${socket.id} left session ${sessionId}`);
   });
 
   socket.on("join-chat", ({ sessionId, username }) => {

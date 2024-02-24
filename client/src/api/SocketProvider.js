@@ -13,28 +13,33 @@ class SocketInstance {
     this.socket.on("connect", () => {
       console.log("connected to server");
     });
-
     this.socket.on("error", (data) => {
       console.log("error", data);
     });
-
+    this.socket.on("start-quiz-session", (data) => {
+        this.quizSessionStartedCallback && this.quizSessionStartedCallback(data);
+    });
     this.socket.on("quiz-question", (data) => {
       this.quizQuestionCallback && this.quizQuestionCallback(data);
     });
-
     this.socket.on("quiz-question-response", (data) => {
       this.quizQuestionResponseCallback &&
         this.quizQuestionResponseCallback(data);
     });
+    
   }
 
-  startTimer() {
-    this.socket.emit("start-timer");
-    this.socket.on("timer-dec", (data) => {
-      // callback(data)
+  createTimer(callback) {
+    this.socket.on("times-up", (data) => {
+      console.log("fini cette question");
+      var button = document.getElementById("button-send-answer");
+      // Simulate a click on the button
+      button.click();
     });
-    this.socket.on("question-timeout", (data) => {
-      // callback(data);
+
+    this.socket.on("timer-dec", (data) => {
+      console.log("timer", data);
+      callback(data); 
     });
   }
 
@@ -57,9 +62,14 @@ class SocketInstance {
       callback(data);
     });
   }
+  quitRoom(sessionId) {
+    this.socket.emit("quit-room", sessionId);
+  }
+
   listQuestion(sessionId, quizId, usedQuestions) {
     this.socket.emit("list-question", { sessionId, quizId, usedQuestions });
   }
+
   anwserQuestion(sessionId, quizId, questionId, answers) {
     this.socket.emit("answer-question", {
       sessionId,
@@ -67,6 +77,10 @@ class SocketInstance {
       questionId,
       answers,
     });
+  }
+  
+  registerQuizSessionStarted(callback) {
+    this.quizSessionStartedCallback = callback;
   }
   registerQuizQuestion(callback) {
     this.quizQuestionCallback = callback;

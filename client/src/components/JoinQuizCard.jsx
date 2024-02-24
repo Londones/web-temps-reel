@@ -8,10 +8,7 @@ import Box from "@mui/material/Box";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-const JoinQuizCard = ({ quiz, isAdmin, joinQuiz, addQuiz }) => {
-  const handleJoinQuiz = () => {
-    joinQuiz(quiz);
-  };
+const JoinQuizCard = ({ quiz, isAdmin, addQuiz }) => {
   const handleAddQuiz = () => {
     addQuiz(quiz);
     handleSuccess();
@@ -32,10 +29,9 @@ const JoinQuizCard = ({ quiz, isAdmin, joinQuiz, addQuiz }) => {
 
   return (
     <Card
-      sx={{ width: "30%" }}
       style={{
         boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
-        padding: "6rem 2rem",
+        padding: "2rem 2rem",
         borderRadius: "10px",
       }}
     >
@@ -46,7 +42,7 @@ const JoinQuizCard = ({ quiz, isAdmin, joinQuiz, addQuiz }) => {
           variant="filled"
           sx={{ width: "100%" }}
         >
-          Quiz added successfully !
+          Quiz started successfully !
         </Alert>
       </Snackbar>
       <CardContent>
@@ -66,17 +62,7 @@ const JoinQuizCard = ({ quiz, isAdmin, joinQuiz, addQuiz }) => {
               onClick={handleAddQuiz}
               style={{ backgroundColor: "rgb(63, 81, 181)" }}
             >
-              Add quiz to session
-            </Button>
-          )}
-          {!isAdmin && (
-            <Button
-              size="small"
-              variant="contained"
-              onClick={handleJoinQuiz}
-              style={{ backgroundColor: "rgb(63, 81, 181)" }}
-            >
-              Start quiz
+              Start quiz for session
             </Button>
           )}
         </Box>
