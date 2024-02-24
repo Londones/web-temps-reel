@@ -1,21 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import JoinQuizCard from "./JoinQuizCard";
 import io from "socket.io-client";
 
 const QuizListComponent = ({ quizzes, addQuiz, isAdmin }) => {
-  const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const socket = io("http://localhost:3000");
   const [timer, setTimer] = useState(0);
 
- const handleJoinQuiz = (quiz) => {
-  if (quiz && quiz.id) {
-    navigate(`/displayQuiz/${quiz.id}`);
-  } else {
-    setMessage("No available quiz to join!");
-  }
- }
  const handleAddQuiz = (quiz) => {
   addQuiz(quiz);
  }
@@ -50,7 +41,6 @@ return (
           key={i}
           quiz={quiz}
           isAdmin={isAdmin}
-          joinQuiz={handleJoinQuiz}
           addQuiz={handleAddQuiz}
         />
       ))}

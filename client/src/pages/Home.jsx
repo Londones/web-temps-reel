@@ -41,7 +41,7 @@ const Home = () => {
         variant="h4"
         component="h2"
         class="home"
-        style={{ color: "white", marginTop: "4em", fontSize: "2.5em" }}
+        style={{ color: "white", marginTop: "1em", fontSize: "2.5em" }}
       >
         Hi <i>{auth.firstName}</i> ! Welcome here !
       </Typography>
