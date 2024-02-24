@@ -75,7 +75,7 @@ html {
 }
 
 .create-quiz-wrapper {
-  margin-top: 10%;
+  margin-top: 1%;
 
 }
 
@@ -156,7 +156,6 @@ html {
   top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%);
-  background-color: white;
   color: black;
   padding: 5rem;
 }

@@ -13,23 +13,38 @@ class SocketInstance {
     this.socket.on("connect", () => {
       console.log("connected to server");
     });
+
     this.socket.on("error", (data) => {
       console.log("error", data);
     });
+
     this.socket.on("quiz-question", (data) => {
       this.quizQuestionCallback && this.quizQuestionCallback(data);
     });
+
     this.socket.on("quiz-question-response", (data) => {
       this.quizQuestionResponseCallback &&
         this.quizQuestionResponseCallback(data);
     });
   }
+
+  startTimer() {
+    this.socket.emit("start-timer");
+    this.socket.on("timer-dec", (data) => {
+      // callback(data)
+    });
+    this.socket.on("question-timeout", (data) => {
+      // callback(data);
+    });
+  }
+
   createRoomSession(sessionId, callback) {
     this.socket.emit("session-created", sessionId);
     this.socket.on("response-session-created", (data) => {
       callback(data);
     });
   }
+
   addQuizToSession(sessionId, quiz, callback) {
     this.socket.emit("add-quiz-session", { sessionId, quiz });
     this.socket.on("response-add-quiz", (data) => {

@@ -118,7 +118,6 @@ io.on("connection", (socket) => {
    * list question for a quiz
    */
   socket.on("list-question", async ({ sessionId, quizId, usedQuestions }) => {
-    startQuestionTimer(); // Démarre le timer de la question
     if (!sessions.includes(sessionId)) {
       console.log("Session does not exist");
       socket.emit("error", { error: "SessionNotFound!", sessionId: sessionId });
@@ -127,30 +126,6 @@ io.on("connection", (socket) => {
     const question = await getQuestionForQuiz(quizId, usedQuestions);
     io.to(sessionId).emit("quiz-question", { question, quizId });
   });
-
-  socket.on(
-    "answer-question",
-    async ({ sessionId, quizId, questionId, answers }) => {
-      if (!sessions.includes(sessionId)) {
-        console.log("Session does not exist");
-        socket.emit("error", {
-          error: "SessionNotFound!",
-          sessionId: sessionId,
-        });
-        return;
-      }
-      const hasCorrect = await checkAnswerForQuestion(
-        quizId,
-        questionId,
-        answers
-      );
-      io.to(sessionId).emit("quiz-question-response", {
-        hasCorrect,
-        quizId,
-        questionId,
-      });
-    }
-  );
 
   /**
    * Answer a question
@@ -179,6 +154,11 @@ io.on("connection", (socket) => {
     }
   );
 
+
+  socket.on('start-timer', () => {  
+    console.log('timer started !!!!!!!!!!!!');
+    startQuestionTimer(); 
+  });
   /**
    * Disconnect
    */
@@ -197,11 +177,13 @@ io.on("connection", (socket) => {
   });
 });
 
+
 function startQuestionTimer() {
   clearInterval(timerInterval);
   timerValue = TIMER_DURATION;
   timerInterval = setInterval(() => {
     if (timerValue > 0) {
+      console.log("timerValue", timerValue);
       timerValue--;
       io.emit("timer-dec", timerValue);
     } else {

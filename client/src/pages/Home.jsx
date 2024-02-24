@@ -1,5 +1,5 @@
 import { Typography, Button } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SocketProvider } from "../api/SocketProvider";
 import QuizListComponent from "../components/QuizList";
 import useAuth from "../hooks/useAuth";

@@ -12,6 +12,7 @@ const Quiz = () => {
     const { id } = useParams();
     const effectRan = useRef(false);
     const usedQuestions = [];
+    const [hasCorrect, setHasCorrect] = useState(null);
 
     const handleAnswer = (answers) => {
         console.log('handleAnswer', answers);
@@ -21,6 +22,7 @@ const Quiz = () => {
     const listQuestion = () => {
         console.log('listQuestion', id, usedQuestions);
         SocketProvider.listQuestion(sessionQuiz, id, usedQuestions);
+
     }
 
     useEffect(() => {    
@@ -36,10 +38,10 @@ const Quiz = () => {
                 }
             });
             SocketProvider.registerQuizQuestionResponse((data) => {
-                console.log('quiz-question-response', data);
                 if (data.quizId !== id) return;
-                // if (data.hasCorrect) setMessage('Correct!');
-                // else setMessage('Incorrect!');
+                if (data.hasCorrect !== undefined) {
+                    setHasCorrect(data.hasCorrect);
+                }
                 listQuestion();
             });
         }
@@ -54,7 +56,7 @@ const Quiz = () => {
             <div>
                 <Typography variant="h4" component="h2" class="home" style={{marginTop : '2%'}}>{message}</Typography>
                 { question &&
-                    <DisplayQuestion question={question} sendAnswer={handleAnswer} />
+                    <DisplayQuestion question={question} hasCorrect={hasCorrect} sendAnswer={handleAnswer} />
                 }
             </div>
         </>

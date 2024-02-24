@@ -23,7 +23,8 @@ function ResponsiveAppBar() {
   const navigate = useNavigate();
 
   if (auth?.role === "admin") {
-    pages.push({ label: "Dashboard", link: "/admin/dashboard" });
+    pages.push({ label: "Dashboard QCM", link: "/admin/dashboard" });
+    pages.push({ label: "Create session", link: "/admin" });
   }
 
   const handleOpenNavMenu = (event) => {
