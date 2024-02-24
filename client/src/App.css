@@ -11,6 +11,7 @@ html {
   background-color: #381272;
   min-height: 100vh;
   color: white;
+  background-image: url("https://images.unsplash.com/photo-1554034483-04fda0d3507b?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
 }
 
 .logo {
@@ -67,7 +68,8 @@ html {
 }
 
 
-.create-quizz-title, .home {
+.create-quizz-title,
+.home {
   font-size: 1.5rem;
   font-weight: 600;
 }
@@ -77,22 +79,22 @@ html {
 
 }
 
-.admin-dashboard{
+.admin-dashboard {
   font-size: 2rem;
   font-weight: 600;
 }
 
-.logo{
+.logo {
   font-size: 1rem;
 }
 
-.css-1tyjjsg-MuiTypography-root{
+.css-1tyjjsg-MuiTypography-root {
   color: #381272 !important;
   font-weight: 600 !important;
   font-size: 1rem !important;
 }
 
-.quizzes{
+.quizzes {
   display: flex;
   width: 90%;
   margin: auto;
@@ -100,15 +102,14 @@ html {
   flex-wrap: wrap;
 }
 
-.quizzes .MuiPaper-root{
+.quizzes .MuiPaper-root {
   margin: 1rem;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset !important;
+  /* box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset !important; */
   padding: 6rem 0rem;
   flex-basis: 20%;
 }
 
-.quiz-card{
-}
+.quiz-card {}
 
 
 .join-session-card {
@@ -124,7 +125,7 @@ html {
   color: black;
 }
 
-.create-session-card{
+.create-session-card {
   background-color: white;
   border-radius: 12px;
   padding: 2rem;
@@ -134,9 +135,15 @@ html {
   margin-top: 4rem;
 }
 
-.center{
+.center {
   position: absolute !important;
   top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%);
+}
+
+.logout-btn {
+  border: 2px solid #75A0CB;
+  border-radius: 4px;
+  padding: 7px;
 }

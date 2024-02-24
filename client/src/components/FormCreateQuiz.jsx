@@ -52,11 +52,11 @@ const FormCreateQuiz = () => {
 
   return (
     <>
-      <div className="create-quiz-wrapper">
-        <Typography variant="h4" component="h2" className="create-quizz">
+      <div class="create-quiz-wrapper">
+        <Typography variant="h4" component="h2" class="create-quizz">
           Create Quiz
         </Typography>
-        <Container component="main" maxWidth="xs" className="create-quiz-card">
+        <Container component="main" maxWidth="xs" class="create-quiz-card">
           <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
             <Alert
               onClose={handleClose}

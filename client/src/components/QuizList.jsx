@@ -44,10 +44,10 @@ const QuizListComponent = ({ quizzes, addQuiz, isAdmin }) => {
     <>
       {timer > 0 && <p>Temps restant: {timer} secondes</p>}
       {message && <p>{message}</p>}
-      <div className="quizzes">
+      <div class="quizzes">
         {quizzes.map((quiz, i) => (
           <JoinQuizCard
-            className="quiz-card"
+            class="quiz-card"
             key={i}
             quiz={quiz}
             isAdmin={isAdmin}

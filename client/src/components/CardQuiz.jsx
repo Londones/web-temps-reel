@@ -15,7 +15,7 @@ const CardQuiz = ({ quiz }) => {
         padding: "6rem 0rem",
         borderRadius: "10px",
       }}
-      className="center"
+      class="center"
     >
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">

@@ -2,13 +2,15 @@ import { Typography, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import { SocketProvider } from "../api/SocketProvider";
 import QuizListComponent from "../components/QuizList";
+import useAuth from "../hooks/useAuth";
+import Alert from '@mui/material/Alert';
 
 const Home = () => {
   const [sessionId, setSessionId] = useState(null);
   const [quizzes, setQuizzes] = useState([]);
   const [showCreateQuiz, setShowCreateQuiz] = useState(false);
-  const userName = localStorage.getItem("userName") || "";
-
+  const { auth } = useAuth();
+  
   const handleCreateSession = () => {
     let newSessionId = Math.random().toString(36).substring(2, 15);
     SocketProvider.createRoomSession(newSessionId, (data) => {
@@ -38,12 +40,12 @@ const Home = () => {
       <Typography
         variant="h4"
         component="h2"
-        className="home"
+        class="home"
         style={{ color: "white", marginTop: "4em", fontSize: "2.5em" }}
       >
-        Hi <i>{userName}</i> ! Welcome here !
+        Hi <i>{auth.firstName}</i> ! Welcome here !
       </Typography>
-      <div className="create-session-card">
+      <div class="create-session-card">
         <Button
           color="secondary"
           variant="outlined"
@@ -53,6 +55,7 @@ const Home = () => {
           Create new session
         </Button>
         {sessionId && <p>Session ID: {sessionId}</p>}
+        <Alert severity="warning"  style={{margin : '1rem'}}>This session ID will show only once. Make sure to copy and save it.</Alert>
         {sessionId && (
           <Button
             color="secondary"
@@ -65,20 +68,22 @@ const Home = () => {
         )}
       </div>
       <div>
-        <Typography
-          variant="h4"
-          component="h2"
-          className="home"
-          style={{ color: "white", "font-size": "1.5em" }}
-        >
-          Pick the Session's Quiz
-        </Typography>
         {showCreateQuiz && (
-          <QuizListComponent
-            quizzes={quizzes}
-            isAdmin={true}
-            addQuiz={handleAddQuiz}
-          />
+          <>
+            <Typography
+              variant="h4"
+              component="h2"
+              class="home"
+              style={{ color: "white", fontSize: "1.5em", marginTop: "1em"}}
+            >
+              Pick the Session's Quiz
+            </Typography>
+            <QuizListComponent
+              quizzes={quizzes}
+              isAdmin={true}
+              addQuiz={handleAddQuiz}
+            />
+          </>
         )}
       </div>
     </div>
