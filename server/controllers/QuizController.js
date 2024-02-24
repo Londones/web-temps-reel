@@ -28,7 +28,9 @@ const QuizController = {
 
     async getQuestionForQuiz(quizId, usedQuestions = []) {
         try {
-            const question = (await Question.findAll({ quiz_id: quizId })).find(question => !usedQuestions.includes(question.id))//.map(question => question.toJSON());
+            const question = (await Question.findAll({ where: { quiz_id: quizId },
+                attributes: ['id', 'quiz_id', 'question', 'options'],
+            })).find(question => !usedQuestions.includes(question.id))
             return question;
         } catch (error) {
             console.error(error);

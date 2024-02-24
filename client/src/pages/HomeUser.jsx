@@ -39,7 +39,7 @@ const Home = () => {
       >
         Join session
       </Button>
-      {sessionQuiz && <QuizListComponent quizzes={quizzes} />}
+      {sessionQuiz && <QuizListComponent quizzes={quizzes} isAdmin={false} />}
       {sessionId && <ChatRoom sessionId={sessionId} />}
     </div>
   );

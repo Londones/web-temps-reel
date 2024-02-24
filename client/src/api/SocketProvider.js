@@ -30,6 +30,12 @@ class SocketInstance {
       callback(data);
     });
   }
+  addQuizToSession(sessionId, quiz, callback) {
+    this.socket.emit("add-quiz-session", { sessionId, quiz });
+    this.socket.on("response-add-quiz", (data) => {
+      callback(data);
+    });
+  }
   joinRoom(sessionId, callback) {
     this.socket.emit("join-room", sessionId);
     this.socket.on("response-join", (data) => {
