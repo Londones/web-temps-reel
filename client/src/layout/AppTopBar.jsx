@@ -44,6 +44,7 @@ function ResponsiveAppBar() {
   const handleLogout = () => {
     handleCloseUserMenu();
     logout();
+    localStorage.setItem('userConnected', false);
   };
 
   return (
@@ -162,9 +163,9 @@ function ResponsiveAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <MenuItem onClick={handleCloseUserMenu}>
+                {/* <MenuItem onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">Profil</Typography>
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem onClick={handleLogout}>
                   <Typography textAlign="center">Se déconnecter</Typography>
                 </MenuItem>

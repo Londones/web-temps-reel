@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
 #root,
 body,
@@ -95,10 +96,47 @@ html {
   display: flex;
   width: 90%;
   margin: auto;
-  justify-content: space-between;
-  margin-top: 5rem;
+  justify-content: start;
+  flex-wrap: wrap;
+}
+
+.quizzes .MuiPaper-root{
+  margin: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset !important;
+  padding: 6rem 0rem;
+  flex-basis: 20%;
 }
 
 .quiz-card{
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset !important;
+}
+
+
+.join-session-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 20rem;
+  margin: auto;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+}
+
+.create-session-card{
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 20rem;
+  margin: auto;
+  color: black;
+  margin-top: 4rem;
+}
+
+.center{
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%);
 }
