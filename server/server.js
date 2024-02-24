@@ -128,30 +128,6 @@ io.on("connection", (socket) => {
     io.to(sessionId).emit("quiz-question", { question, quizId });
   });
 
-  socket.on(
-    "answer-question",
-    async ({ sessionId, quizId, questionId, answers }) => {
-      if (!sessions.includes(sessionId)) {
-        console.log("Session does not exist");
-        socket.emit("error", {
-          error: "SessionNotFound!",
-          sessionId: sessionId,
-        });
-        return;
-      }
-      const hasCorrect = await checkAnswerForQuestion(
-        quizId,
-        questionId,
-        answers
-      );
-      io.to(sessionId).emit("quiz-question-response", {
-        hasCorrect,
-        quizId,
-        questionId,
-      });
-    }
-  );
-
   /**
    * Answer a question
    */
