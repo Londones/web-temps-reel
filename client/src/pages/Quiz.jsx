@@ -4,6 +4,7 @@ import { Typography } from '@mui/material';
 import { SocketProvider } from '../api/SocketProvider';
 import DisplayQuestion from '../components/DisplayQuestion';
 import useAuth from "../hooks/useAuth";
+import ListNotifs from "../components/ListNotif";
 
 const Quiz = () => {
     const [message, setMessage] = useState("Bienvenu au Quiz!");
@@ -25,7 +26,7 @@ const Quiz = () => {
 
     }
 
-    useEffect(() => {    
+    useEffect(() => {
         const joinRoom = async () => {
             listQuestion();
             SocketProvider.registerQuizQuestion((data) => {
@@ -49,13 +50,14 @@ const Quiz = () => {
         if (!effectRan.current) joinRoom();
 
         return () => effectRan.current = true;
-     }, []);
+    }, []);
 
     return (
         <>
+            {/* <ListNotifs type={"success"} /> */}
             <div>
-                <Typography variant="h4" component="h2" class="home" style={{marginTop : '2%'}}>{message}</Typography>
-                { question &&
+                <Typography variant="h4" component="h2" class="home" style={{ marginTop: '2%' }}>{message}</Typography>
+                {question &&
                     <DisplayQuestion question={question} hasCorrect={hasCorrect} sendAnswer={handleAnswer} />
                 }
             </div>

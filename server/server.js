@@ -64,7 +64,8 @@ io.on("connection", (socket) => {
     }
     sessions.push(sessionId);
     const quizzes = await getAllQuiz();
-    socket.emit("response-session-created", { sessionId: sessionId, quizzes });
+    socket.emit("response-session-created", { sessionId:  sessionId, quizzes });
+    socket.emit("notif", {message: `Une nouvelle session ${sessionId} vient d'être crée !` });
   });
 
   /**
@@ -81,6 +82,8 @@ io.on("connection", (socket) => {
     sessionQuiz[sessionId].push(quiz);
     socket.emit("response-add-quiz", { sessionId, quiz });
     socket.to(sessionId).emit("start-quiz-session", { sessionId, quizId: quiz.id });
+    socket.to(sessionId).emit("notif", {  message: `Un Quizz vient d'être ajouté à la session.` });
+
   });
 
   /**
@@ -98,11 +101,11 @@ io.on("connection", (socket) => {
       return;
     }
     socket.join(sessionId);
-    console.log(`Socket ${socket.id} joined session ${sessionId}`);
     io.to(sessionId).emit("response-join", {
       sessionId: sessionId,
-      message: `Bienvenue dans la session ${sessionId} !`,
+      message: `Welcome to the session ${sessionId} !`,
     });
+    socket.to(sessionId).emit("notif", { message: `Une nouvelle personne vient de rejoindre la session.` });
   });
 
   socket.on("quit-room", (sessionId) => {
@@ -132,6 +135,7 @@ io.on("connection", (socket) => {
     const question = await getQuestionForQuiz(quizId, usedQuestions);
    
     io.to(sessionId).emit("quiz-question", { question, quizId });
+    
     if(question != null) {
       startQuestionTimer(sessionId);
     }
@@ -194,11 +198,12 @@ function startQuestionTimer(sessionId) {
   timerValue = TIMER_DURATION;
   timerInterval = setInterval(() => {
     if (timerValue > 0) {
-      console.log("timerValue", timerValue);
       timerValue--;
       io.to(sessionId).emit("timer-dec", timerValue);
+      if(timerValue <= 10){
+        io.to(sessionId).emit("notif", { message: `Il vous reste ${timerValue} secondes pour répondre à la question.`});
+      }
     } else {
-      console.log("Time's up!");
       io.to(sessionId).emit("times-up")
       clearInterval(timerInterval);
     }

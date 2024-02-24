@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { SocketProvider } from "../api/SocketProvider";
 import useAuth from "../hooks/useAuth";
 import ChatRoom from "../components/ChatRoom";
+import ListNotifs from "../components/ListNotif";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const Home = () => {
   }
 
   const handleOpenChat = () => {
-    setShowChat(!showChat); 
+    setShowChat(!showChat);
   };
 
   SocketProvider.registerQuizSessionStarted((data) => {
@@ -39,6 +40,7 @@ const Home = () => {
 
   return (
     <div>
+      <ListNotifs type={"info"}/>
       <Typography
         variant="h4"
         component="h2"
@@ -47,14 +49,14 @@ const Home = () => {
       >
         Hi <i>{auth?.username}</i> ! Welcome here !
       </Typography>
-      { sessionId &&
-      <Typography
-        variant="h2"
-        component="h1"
-        class="home"
-      >
-        Wait for the quiz to start
-      </Typography>
+      {sessionId &&
+        <Typography
+          variant="h2"
+          component="h1"
+          class="home"
+        >
+          Wait for the quiz to start
+        </Typography>
       }
       {!sessionId && (
         <div class="join-session-card">

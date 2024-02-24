@@ -1,6 +1,7 @@
 import { Card, CardContent, Typography, FormControlLabel, Checkbox, Button, Alert } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { SocketProvider } from "../api/SocketProvider";
+import ListNotifs from "../components/ListNotif";
 
 const DisplayQuestion = ({ question, sendAnswer, hasCorrect }) => {
     const [selectedOptions, setSelectedOptions] = useState([]);
@@ -26,34 +27,37 @@ const DisplayQuestion = ({ question, sendAnswer, hasCorrect }) => {
     }, []);
 
     return (
-        <div class='center'>
-            {timer > 0 && <p>Temps restant: {timer} secondes</p>}
-            <Card class="display-question-card">
-                {hasCorrect === true && <Alert severity="success">Correct!</Alert>}
-                {hasCorrect === false && <Alert severity="error">Incorrect!</Alert>}
-                <CardContent>
-                    {question &&
-                        <Typography variant="h5" component="div" sx={{ mb: 1 }}>
-                            {question.question}
-                        </Typography>
-                    }
-                    <div className='question-options'>
-                        {question.options.map((option, i) => (
-                            <FormControlLabel
-                                key={i}
-                                control={<Checkbox
-                                    checked={selectedOptions.includes(option)}
-                                    onChange={(e) => handleOptionChange(e, option)}
-                                    name={option}
-                                    color="primary"
-                                />}
-                                label={option}
-                            />
-                        ))}
-                    </div>
-                </CardContent>
-                <Button id="button-send-answer" color="secondary" variant="outlined" size="small" onClick={handleAnswer}>Send</Button>
-            </Card>
+        <div>
+            <ListNotifs type={"warning"} />
+            <div class='center'>
+                {timer > 0 && <p>Temps restant: {timer} secondes</p>}
+                <Card class="display-question-card">
+                    {hasCorrect === true && <Alert severity="success">Correct!</Alert>}
+                    {hasCorrect === false && <Alert severity="error">Incorrect!</Alert>}
+                    <CardContent>
+                        {question &&
+                            <Typography variant="h5" component="div" sx={{ mb: 1 }}>
+                                {question.question}
+                            </Typography>
+                        }
+                        <div className='question-options'>
+                            {question.options.map((option, i) => (
+                                <FormControlLabel
+                                    key={i}
+                                    control={<Checkbox
+                                        checked={selectedOptions.includes(option)}
+                                        onChange={(e) => handleOptionChange(e, option)}
+                                        name={option}
+                                        color="primary"
+                                    />}
+                                    label={option}
+                                />
+                            ))}
+                        </div>
+                    </CardContent>
+                    <Button id="button-send-answer" color="secondary" variant="outlined" size="small" onClick={handleAnswer}>Send</Button>
+                </Card>
+            </div>
         </div>
     )
 }

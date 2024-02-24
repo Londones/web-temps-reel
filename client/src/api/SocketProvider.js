@@ -27,19 +27,27 @@ class SocketInstance {
         this.quizQuestionResponseCallback(data);
     });
     
+   
   }
 
   createTimer(callback) {
     this.socket.on("times-up", (data) => {
       console.log("fini cette question");
       var button = document.getElementById("button-send-answer");
-      // Simulate a click on the button
       button.click();
     });
 
     this.socket.on("timer-dec", (data) => {
       console.log("timer", data);
       callback(data); 
+    });
+  }
+
+
+  listNotifs(callback){
+    this.socket.on("notif", (data) => {
+      callback(data);
+      console.log("notif", data);
     });
   }
 
