@@ -98,7 +98,6 @@ io.on("connection", (socket) => {
       return;
     }
     socket.join(sessionId);
-    //console.log("quizzes", quizzes);
     console.log(`Socket ${socket.id} joined session ${sessionId}`);
     io.to(sessionId).emit("response-join", {
       sessionId: sessionId,
@@ -171,10 +170,6 @@ io.on("connection", (socket) => {
   );
 
 
-  // socket.on('start-timer', () => {  
-  //   console.log('timer started !!!!!!!!!!!!');
-  //   startQuestionTimer(); 
-  // });
   /**
    * Disconnect
    */

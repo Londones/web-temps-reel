@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import useLogout from "../hooks/useLogout";
 import useAuth from "../hooks/useAuth";
+import { useEffect } from "react";
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -48,12 +49,23 @@ function ResponsiveAppBar() {
   };
 
   const handleQuizRTClick = () => {
+
     if (auth?.role === "user") {
       navigate("/user");
     } else {
       navigate("/admin");
     }
   };
+
+  useEffect(() => {
+    if (auth?.role === "admin") {
+      navigate("/admin");
+    } else if (auth?.role === "user") {
+      navigate("/user");
+    } else {
+      navigate("/login");
+    }
+  }, [auth, navigate]);
 
   return (
     <AppBar
@@ -153,7 +165,7 @@ function ResponsiveAppBar() {
           {auth?.username ? (
             <Box sx={{ flexGrow: 0 }}>
               <MenuItem onClick={handleLogout}>
-                <Typography textAlign="center"  class="logout-btn">Se déconnecter</Typography>
+                <Typography textAlign="center" class="logout-btn">Se déconnecter</Typography>
               </MenuItem>
             </Box>
           ) : (

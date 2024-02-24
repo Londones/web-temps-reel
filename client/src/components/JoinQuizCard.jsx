@@ -31,7 +31,7 @@ const JoinQuizCard = ({ quiz, isAdmin, addQuiz }) => {
     <Card
       style={{
         boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
-        padding: "2rem 2rem",
+        padding: "1rem 1rem",
         borderRadius: "10px",
       }}
     >
