@@ -40,23 +40,28 @@ const QuizController = {
 
     async checkAnswerForQuestion(quizId, questionId, answers) {
         try {
-            const question = (await Question.findOne({ quiz_id: quizId, question_id: questionId }));
-            if (!question) return false;  
-            else if (question.answers.length === answers.length) {
-                answers.sort();
-                question.answers.sort();
-                return answers.every((answer, index) => answer === question.answers[index]);
-            } else return false;
+            const question = await Question.findOne({
+                where: { quiz_id: quizId, id: questionId },
+            });
+            if (!question) {
+                return false;
+            } else if (question.answers.length === answers.length) {
+                const sortedAnswers = [...answers].sort();
+                const sortedQuestionAnswers = [...question.answers].sort();
+                return sortedAnswers.every((answer, index) => answer === sortedQuestionAnswers[index]);
+            } else {
+                return false;
+            }
         } catch (error) {
             console.error(error);
         }
-        return false
+        return false;
     },
 
     async getQuestions(req, res) {
         try {
             const { quiz_id } = req.params;
-            const questions = await Question.findAll({ quiz_id: quiz_id });
+            const questions = await Question.findAll({ where: { quiz_id: quiz_id } });
             res.status(200).json({ questions });
         } catch (error) {
             res.status(400).json({ error: error.message });

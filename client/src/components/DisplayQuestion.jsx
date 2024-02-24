@@ -1,7 +1,7 @@
-import { Card, CardContent, Typography, FormControlLabel, Checkbox, Button } from '@mui/material';
+import { Card, CardContent, Typography, FormControlLabel, Checkbox, Button, Alert } from '@mui/material';
 import { useState, useEffect } from 'react';
 
-const DisplayQuestion = ({ question, sendAnswer }) => {
+const DisplayQuestion = ({ question, sendAnswer, hasCorrect }) => {
     const [selectedOptions, setSelectedOptions] = useState([]);
 
     const handleOptionChange = (e, option) => {
@@ -24,6 +24,8 @@ const DisplayQuestion = ({ question, sendAnswer }) => {
     return (
         <div>
             <Card sx={{ width: '25%', margin: '0 1rem 1rem' }} style={{ "boxShadow": "rgba(149, 157, 165, 0.2) 0px 8px 24px", "padding": "6rem 2rem", "borderRadius": "10px" }}>
+                { hasCorrect === true && <Alert severity="success">Correct!</Alert> }
+                { hasCorrect === false && <Alert severity="error">Incorrect!</Alert> }
                 <CardContent>
                     { question &&
                         <Typography variant="h5" component="div" sx={{ mb: 1 }}>

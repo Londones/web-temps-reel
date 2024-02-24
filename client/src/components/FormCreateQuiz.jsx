@@ -106,7 +106,7 @@ const FormCreateQuiz = () => {
         </Container>
       </div>
       <div
-        style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}
+        style={{ display: "flex", justifyContent: "center", marginTop: "0.5rem"}}
       >
         {newQuiz && <CardQuiz quiz={newQuiz} />}
       </div>

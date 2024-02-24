@@ -9,13 +9,13 @@ import Box from "@mui/material/Box";
 const CardQuiz = ({ quiz }) => {
   return (
     <Card
-      sx={{ width: "30%" }}
+      sx={{ width: "35%" }}
       style={{
         boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
         padding: "6rem 0rem",
         borderRadius: "10px",
+        backgroundColor: "#f5f5f5",
       }}
-      class="center"
     >
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
