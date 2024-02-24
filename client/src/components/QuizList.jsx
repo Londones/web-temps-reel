@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import JoinQuizCard from './JoinQuizCard';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Button from "@mui/material/Button";
+import JoinQuizCard from "./JoinQuizCard";
 import io from "socket.io-client";
 
 const QuizListComponent = ({ quizzes, addQuiz, isAdmin }) => {
@@ -9,7 +9,6 @@ const QuizListComponent = ({ quizzes, addQuiz, isAdmin }) => {
   const [message, setMessage] = useState("");
   const socket = io("http://localhost:3000");
   const [timer, setTimer] = useState(0);
-
 
   useEffect(() => {
     if (socket) {
@@ -36,10 +35,10 @@ const QuizListComponent = ({ quizzes, addQuiz, isAdmin }) => {
     } else {
       setMessage("Aucun quiz disponible à rejoindre !");
     }
-  }
+  };
   const handleAddQuiz = (quiz) => {
     addQuiz(quiz);
-  }
+  };
 
   return (
     <>
@@ -47,11 +46,18 @@ const QuizListComponent = ({ quizzes, addQuiz, isAdmin }) => {
       {message && <p>{message}</p>}
       <div className="quizzes">
         {quizzes.map((quiz, i) => (
-          <JoinQuizCard className="quiz-card" key={i} quiz={quiz} isAdmin={isAdmin} joinQuiz={handleJoinQuiz} addQuiz={handleAddQuiz} />
+          <JoinQuizCard
+            className="quiz-card"
+            key={i}
+            quiz={quiz}
+            isAdmin={isAdmin}
+            joinQuiz={handleJoinQuiz}
+            addQuiz={handleAddQuiz}
+          />
         ))}
       </div>
     </>
   );
-}
+};
 
 export default QuizListComponent;
