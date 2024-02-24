@@ -1,4 +1,6 @@
 let roomUsers = {};
+let roomMessages = {};
+const Question = require("../models/Question");
 
 const handleJoinRoom = (io) => (sessionId, username) => {
   if (!roomUsers[sessionId]) {
@@ -6,14 +8,31 @@ const handleJoinRoom = (io) => (sessionId, username) => {
   }
   if (!roomUsers[sessionId].includes(username)) {
     roomUsers[sessionId].push(username);
-    io.to(sessionId).emit("room-users", roomUsers[sessionId]);
+  }
+  io.to(sessionId).emit("room-users", roomUsers[sessionId]);
+  if (roomMessages[sessionId]) {
+    io.to(sessionId).emit("chat-history", roomMessages[sessionId]);
   }
 };
 
 const handleMessage =
-  (socket) =>
-  ({ message, sessionId, username }) => {
-    socket.to(sessionId).emit("chat-received", { message, username: username });
+  (io) =>
+  async ({ message, sessionId, username, quizId }) => {
+    if (!roomMessages[sessionId]) {
+      roomMessages[sessionId] = [];
+    }
+    if (quizId) {
+      const questions = await getQuestions(quizId);
+      if (answerChecker(questions, message)) {
+        io.to(sessionId).emit("cheating-detected", {
+          username,
+          message: "tried to cheat!",
+        });
+        return;
+      }
+    }
+    roomMessages[sessionId].push({ username, message });
+    io.to(sessionId).emit("chat-received", { username, message });
   };
 
 const handleDisconnect = (socket, io) => () => {
@@ -23,6 +42,20 @@ const handleDisconnect = (socket, io) => () => {
     );
     io.to(sessionId).emit("room-users", roomUsers[sessionId]);
   });
+};
+
+const answerChecker = (questions, message) => {
+  const messageToLowerCase = message.toLowerCase();
+  const userAnswer = messageToLowerCase.split(" ");
+  const answersTolowerCase = questions.answers.map((answer) =>
+    answer.toLowerCase()
+  );
+  return compareArrays(answersTolowerCase, userAnswer);
+};
+
+const getQuestions = async (quizId) => {
+  const questions = await Question.findAll({ quiz_id: quizId });
+  return questions;
 };
 
 module.exports = {

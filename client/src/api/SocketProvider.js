@@ -54,21 +54,14 @@ class SocketInstance {
     this.quizQuestionResponseCallback = callback;
   }
 
-  joinChat(sessionId, username, messageCallback, roomUsersCallback) {
+  joinChat(sessionId, username) {
     this.socket.emit("join-chat", { sessionId, username });
-    this.socket.on("chat-received", (data) => {
-      messageCallback(data);
-    });
-    this.socket.on("room-users", (data) => {
-      roomUsersCallback(data);
-    });
   }
   sendMessage(message, sessionId, username) {
     this.socket.emit("chat-message", { message, sessionId, username });
   }
   registerChatReceived(callback) {
     this.socket.on("chat-received", (data) => {
-      console.log("registering chat received");
       callback(data);
     });
   }
@@ -76,6 +69,15 @@ class SocketInstance {
     this.socket.on("room-users", (data) => {
       callback(data);
     });
+  }
+  registerChatHistory(sessionId) {
+    this.socket.on("chat-history", sessionId);
+  }
+  listenToQuizQuestions(callback) {
+    this.socket.on("quiz-question", callback);
+  }
+  listenToCheatingAttempt(callback) {
+    this.socket.on("cheating-detected", callback);
   }
   getCurrentSessionId() {
     return this.sessionId;

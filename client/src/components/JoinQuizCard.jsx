@@ -38,7 +38,6 @@ const JoinQuizCard = ({ quiz, joinQuiz }) => {
           </Box>
         </CardActions>
       </Card>
-      <ChatRoom />
     </>
   );
 };

@@ -84,8 +84,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("chat-message", ({ message, sessionId, username }) => {
-    console.log("Chat message received", message);
-    handleMessage(socket)({ message, sessionId, username });
+    handleMessage(io)({ message, sessionId, username });
   });
 
   socket.on("list-question", async ({ sessionId, quizId, usedQuestions }) => {
