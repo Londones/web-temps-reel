@@ -43,7 +43,7 @@ const JoinQuizCard = ({ quiz, isAdmin, addQuiz }) => {
           variant="filled"
           sx={{ width: "100%" }}
         >
-          Quiz added successfully !
+          Quiz started successfully !
         </Alert>
       </Snackbar>
       <CardContent>
@@ -63,7 +63,7 @@ const JoinQuizCard = ({ quiz, isAdmin, addQuiz }) => {
               onClick={handleAddQuiz}
               style={{ backgroundColor: "rgb(63, 81, 181)" }}
             >
-              Add quiz to session
+              Start quiz for session
             </Button>
           )}
         </Box>
