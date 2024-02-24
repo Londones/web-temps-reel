@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -18,9 +18,9 @@ function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { auth } = useAuth();
-  //console.log(auth);
   const logout = useLogout();
   const pages = [];
+  const navigate = useNavigate();
 
   if (auth?.role === "admin") {
     pages.push({ label: "Dashboard QCM", link: "/admin/dashboard" });
@@ -46,6 +46,14 @@ function ResponsiveAppBar() {
     logout();
   };
 
+  const handleQuizRTClick = () => {
+    if (auth?.role === "user") {
+      navigate("/user");
+    } else {
+      navigate("/admin");
+    }
+  };
+
   return (
     <AppBar
       position="static"
@@ -56,14 +64,14 @@ function ResponsiveAppBar() {
           <Typography
             variant="h6"
             noWrap
-            component={Link}
-            to="/"
+            onClick={handleQuizRTClick}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
               fontWeight: 700,
               color: "#BA68C8",
               textDecoration: "none",
+              cursor: "pointer", // Ajout du style pour le curseur pointer
             }}
           >
             QuizRT
@@ -114,8 +122,7 @@ function ResponsiveAppBar() {
           <Typography
             variant="h5"
             noWrap
-            component={Link}
-            to="#app-bar-with-responsive-menu"
+            onClick={handleQuizRTClick}
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -125,6 +132,7 @@ function ResponsiveAppBar() {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
+              cursor: "pointer", // Ajout du style pour le curseur pointer
             }}
           >
             QUIZZRT
@@ -143,32 +151,9 @@ function ResponsiveAppBar() {
           </Box>
           {auth?.username ? (
             <Box sx={{ flexGrow: 0 }}>
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">Profil</Typography>
-                </MenuItem>
-                <MenuItem onClick={handleLogout}>
-                  <Typography textAlign="center">Se déconnecter</Typography>
-                </MenuItem>
-              </Menu>
+              <MenuItem onClick={handleLogout}>
+                <Typography textAlign="center"  class="logout-btn">Se déconnecter</Typography>
+              </MenuItem>
             </Box>
           ) : (
             <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
@@ -193,4 +178,4 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
-export default ResponsiveAppBar;
+export default ResponsiveAppBar

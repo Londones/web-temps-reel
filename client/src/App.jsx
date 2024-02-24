@@ -21,7 +21,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route element={<PersistLogin />}>
             <Route path="/displayQuiz/:id" element={<Quiz />} />
-            <Route path="/admin/*" element={<RequireAuth allowedRoles={"admin"} />}>
+              <Route path="/admin/*" element={<RequireAuth allowedRoles={"admin"} />}>
               <Route index element={<Home />} />  
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="quiz/:id/questions" element={<FormCreateQuestion />} />
