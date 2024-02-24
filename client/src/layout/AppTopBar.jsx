@@ -23,7 +23,7 @@ function ResponsiveAppBar() {
   const pages = [];
 
   if (auth?.role === "admin") {
-    pages.push({ label: "Dashboard", link: "/admin/dashboard" });
+    pages.push({ label: "Dashboard QCM", link: "/admin/dashboard" });
   }
 
   const handleOpenNavMenu = (event) => {
