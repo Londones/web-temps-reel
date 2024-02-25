@@ -26,6 +26,7 @@ class SocketInstance {
       this.quizQuestionResponseCallback &&
         this.quizQuestionResponseCallback(data);
     });
+
     this.socket.on("ref-user-choices", (data) => {
       this.refUserChoicesCallback && this.refUserChoicesCallback(data);
     });  
@@ -35,13 +36,27 @@ class SocketInstance {
     this.socket.on("times-up", (data) => {
       console.log("fini cette question");
       var button = document.getElementById("button-send-answer");
-      // Simulate a click on the button
       button.click();
     });
 
     this.socket.on("timer-dec", (data) => {
       // console.log("timer", data);
       callback(data); 
+    });
+  }
+
+
+  listNotifs(callback){
+    this.socket.on("notif", (data) => {
+      console.log("notif", data);
+      callback(data);
+    });
+  }
+
+  listNotifTimer(callback){
+    this.socket.on("notif-timer", (data) => {
+      console.log("notif-timer", data);
+      callback(data);
     });
   }
 
