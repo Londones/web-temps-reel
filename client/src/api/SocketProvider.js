@@ -17,19 +17,18 @@ class SocketInstance {
       console.log("error", data);
     });
     this.socket.on("start-quiz-session", (data) => {
-        this.quizSessionStartedCallback && this.quizSessionStartedCallback(data);
+      this.quizSessionStartedCallback && this.quizSessionStartedCallback(data);
     });
     this.socket.on("quiz-question", (data) => {
       this.quizQuestionCallback && this.quizQuestionCallback(data);
     });
     this.socket.on("quiz-question-response", (data) => {
-      this.quizQuestionResponseCallback &&
-        this.quizQuestionResponseCallback(data);
+      this.quizQuestionResponseCallback && this.quizQuestionResponseCallback(data);
     });
 
     this.socket.on("ref-user-choices", (data) => {
       this.refUserChoicesCallback && this.refUserChoicesCallback(data);
-    });  
+    });
   }
 
   createTimer(callback) {
@@ -41,19 +40,18 @@ class SocketInstance {
 
     this.socket.on("timer-dec", (data) => {
       // console.log("timer", data);
-      callback(data); 
+      callback(data);
     });
   }
 
-
-  listNotifs(callback){
+  listNotifs(callback) {
     this.socket.on("notif", (data) => {
       console.log("notif", data);
       callback(data);
     });
   }
 
-  listNotifTimer(callback){
+  listNotifTimer(callback) {
     this.socket.on("notif-timer", (data) => {
       console.log("notif-timer", data);
       callback(data);
@@ -87,17 +85,18 @@ class SocketInstance {
     this.socket.emit("list-question", { userId, sessionId, quizId, usedQuestions });
   }
 
-  anwserQuestion(userId, sessionId, quizId, questionId, answers, callback) {
+  anwserQuestion(userId, sessionId, quizId, questionId, answers, username, callback) {
     this.socket.emit("answer-question", {
       userId,
       sessionId,
       quizId,
       questionId,
       answers,
-      callback
+      username,
+      callback,
     });
   }
-  
+
   registerQuizSessionStarted(callback) {
     this.quizSessionStartedCallback = callback;
   }
@@ -135,6 +134,21 @@ class SocketInstance {
   }
   listenToCheatingAttempt(callback) {
     this.socket.on("cheating-detected", callback);
+  }
+  initQuizScoreboard({ username, sessionId, quizId }) {
+    this.socket.emit("init-quiz-scoreboard", { username, sessionId, quizId });
+  }
+  declareLastQuestion() {
+    this.socket.emit("last-question");
+  }
+  registerQuestionScore(callback) {
+    this.socket.on("question-score", callback);
+  }
+  registerPersonalRanking(callback) {
+    this.socket.on("final-personal-ranking", callback);
+  }
+  registerGlobalRanking(callback) {
+    this.socket.on("final-scores", callback);
   }
   getCurrentSessionId() {
     return this.sessionId;
