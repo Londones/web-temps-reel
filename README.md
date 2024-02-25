@@ -31,6 +31,7 @@ L'application devrait maintenant être accessible à l'adresse du `localhost`.
 - Rejoindre une salle de QCM avec l'id de session créée par l'administrateur
 - Prendre le QCM une fois commencé par l'administrateur
 - Chat avec les autres utilisateurs dans la même session
+- Notifications lors d'events (création de session, début de quiz, temps de quiz bientôt ecoulé, nouvelle personne dans la session..)
 
 3. QCM :
 - Chaque question a une ou plusieurs bonnes réponses
@@ -51,10 +52,10 @@ L'application devrait maintenant être accessible à l'adresse du `localhost`.
 
 - Ouvrir une nouvelle fenêtre et s'inscrire pour un compte utilisateur
 - Se connecter en tant que l'utilisateur
-- Coller l'id de session et attendre pour que le QCM commence
+- Insérer l'id de session donné par l'admin et attendre pour que le QCM commence
 
-- Retourner à l'interface administrateur, puis cliquer sur le button **Select quiz for session** pour afficher la liste des QCM
-- Cliquer sur le button **Start quiz for session** pour commencer le QCM côté client
+- Retourner à l'interface administrateur, puis cliquer sur le button **Select quiz for session** pour afficher la liste des quiz.
+- Cliquer sur le button **Start quiz for session** pour commencer la diffusion du QUIZ au utilisateurs connectés à la session.
 
 - Retourner à l'interface utilisateur pour répondre aux questions
 
@@ -86,13 +87,9 @@ tous les clients. **[Alicia Saci]**
 8. Chat en direct lors des quiz : Mettre en place un système de chat où les participants peuvent discuter
 pendant un quiz, avec une attention particulière à la gestion des messages en temps réel et à la prévention
 de la triche. **[Awa Bah]**
-9. Envoyer des annonces ou des alertes concernant les événements du quiz, comme le début du quiz, le passage à la prochaine question, ou les rappels avant la fin du temps imparti pour une question.  **[Alicia Saci]**
+9. Envoyer des annonces ou des alertes concernant les événements du quiz, comme le début du quiz, le passage à la prochaine question, ou les rappels avant la fin du temps imparti pour une question. **[Alicia Saci]**
 
-
-9. Notifications en temps réel : Envoyer des annonces ou des alertes concernant les événements du quiz,
-comme le début du quiz, le passage à la prochaine question, ou les rappels avant la fin du temps imparti pour
-une question. **[Alicia Saci]**
-    Les types de notifs faites :
+     Les types de notifs faites :
     - notif lorsqu'un utilisateur rejoins une session quiz 
     - notif 10 seconds avant la fin du quiz
     - notif lorsqu'une nouvelle session est crée
