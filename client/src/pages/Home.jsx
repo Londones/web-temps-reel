@@ -1,9 +1,8 @@
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, Alert } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SocketProvider } from "../api/SocketProvider";
 import QuizListComponent from "../components/QuizList";
 import useAuth from "../hooks/useAuth";
-import Alert from '@mui/material/Alert';
 import ListNotifs from "../components/ListNotif";
 
 const Home = () => {
@@ -37,7 +36,7 @@ const Home = () => {
 
     return (
         <div>
-            <ListNotifs type={"success"}/>
+            <ListNotifs type={"success"} />
             <Typography
                 variant="h4"
                 component="h2"
@@ -75,12 +74,11 @@ const Home = () => {
                             variant="h4"
                             component="h2"
                             class="home"
-                            style={{ color: "white", fontSize: "1.5em", marginTop: "1em" }}
+                            style={{ color: "white", fontSize: "1.5em", marginTop: "auto" }}
                         >
                             Pick the Session's Quiz
-
                         </Typography>
-                        <Alert severity="warning" style={{ margin: '1rem', width: 'fit-content', margin: 'auto' }}>Make sur to share the session's code before starting the Quiz.</Alert>
+                        <Alert severity="warning" style={{ margin: 'auto', width: 'fit-content' }}>Make sur to share the session's code before starting the Quiz.</Alert>
                         <QuizListComponent
                             quizzes={quizzes}
                             isAdmin={true}
@@ -91,17 +89,6 @@ const Home = () => {
             </div>
         </div>
     );
-            <Alert severity="warning"  style={{margin : 'auto 1rem', width : 'fit-content'}}>Make sur to share the session's code before starting the Quiz.</Alert>
-            <QuizListComponent
-              quizzes={quizzes}
-              isAdmin={true}
-              addQuiz={handleAddQuiz}
-            />
-          </>
-        )}
-      </div>
-    </div>
-  );
 };
 
 export default Home;

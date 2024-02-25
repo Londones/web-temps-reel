@@ -57,22 +57,6 @@ function ResponsiveAppBar() {
     }
   };
 
-  useEffect(() => {
-    if (auth?.role === "admin") {
-      navigate("/admin");
-    } else if (auth?.role === "user") {
-      navigate("/user");
-    } else {
-      const currentPath = window.location.pathname;
-      if (currentPath.includes('register')) {
-        navigate("/register");
-      } else if (currentPath.includes('displayQuiz')) {
-        navigate("/displayQuiz");
-      } else {
-        navigate("/login");
-      }
-    }
-  }, [auth, navigate]);
 
   return (
     <AppBar

@@ -9,7 +9,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
 const Quiz = () => {
-    const [message, setMessage] = useState("Bienvenu au Quiz!");
+    const [message, setMessage] = useState("Bienvenue au Quiz!");
     const [choiceMessage, setChoiceMessage] = useState("");
     const [question, setQuestion] = useState(null);
     const [userChoices, setUserChoices] = useState([]);
@@ -29,7 +29,7 @@ const Quiz = () => {
 
     const handleClose = (event, reason) => {
         if (reason === "clickaway") {
-        return;
+            return;
         }
         setOpen(false);
     };
@@ -45,41 +45,9 @@ const Quiz = () => {
     const listQuestion = () => {
         console.log('listQuestion', id, userId, usedQuestions);
         SocketProvider.listQuestion(userId, sessionQuiz, id, usedQuestions);
-
     }
 
-    useEffect(() => {
-        const joinRoom = async () => {
-            listQuestion();
-            SocketProvider.registerQuizQuestion((data) => {
-                console.log('quiz-question', data.question);
-                setQuestion(data.question);
-                if (data.quizId !== id) return;
-                else if (!data.question) return setMessage('No more questions!');
-                else {
-                    usedQuestions.push(data.question.id);
-                }
-            });
-            SocketProvider.registerQuizQuestionResponse((data) => {
-                if (data.quizId !== id) return;
-                if (data.hasCorrect !== undefined) {
-                    setHasCorrect(data.hasCorrect);
-                }
-                listQuestion();
-            });
-    SocketProvider.registerRefUserChoices((data) => {
-        if (!question || !data) return;
-        if (data.quizId !== id) return;
-        if (question.id !== data.questionId) return;
-        const keyAnswer = userChoices.join('-');
-        console.log('refUserChoices', data.userChoices, keyAnswer);
-        if (data.userChoices[keyAnswer]) {
-            setChoiceMessage(`${data.userChoices[keyAnswer]} user(s) chose anwser ${keyAnswer}`);
-            handleAlert();
-        }
-    });
-
-    const joinRoom = async () => {
+    const joinRoom = () => {
         listQuestion();
         SocketProvider.registerQuizQuestion((data) => {
             console.log('quiz-question', data);
@@ -103,9 +71,22 @@ const Quiz = () => {
 
     useEffect(() => {
         if (!effectRan.current) joinRoom();
-
         return () => effectRan.current = true;
     }, []);
+
+    useEffect(() => {
+        SocketProvider.registerRefUserChoices((data) => {
+            if (!question || !data) return;
+            if (data.quizId !== id) return;
+            if (question.id !== data.questionId) return;
+            const keyAnswer = userChoices.join('-');
+            console.log('refUserChoices', data.userChoices, keyAnswer);
+            if (data.userChoices[keyAnswer]) {
+                setChoiceMessage(`${data.userChoices[keyAnswer]} user(s) chose answer ${keyAnswer}`);
+                handleAlert();
+            }
+        });
+    }, [question, userChoices, id]);
 
     return (
         <>
