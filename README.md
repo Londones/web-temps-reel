@@ -68,8 +68,8 @@ bidirectionnelle. **[Alicia Saci]**
 - Diffusion des questions et réception des réponses en temps réel. **[Tran Diep Mai Thi]**
 3. Fonctionnalité de la salle de quiz :
 - Mécanisme permettant aux utilisateurs de participer à un quiz en utilisant un identifiant unique pour la
-session. **[Tran Diep Mai Thi]**
-- Support pour plusieurs salles où différents quiz peuvent se dérouler simultanément.
+session. **[Tran Diep Mai Thi, Alicia Saci]**
+- Support pour plusieurs salles où différents quiz peuvent se dérouler simultanément. **[Tran Diep Mai Thi]**
 4. Minuteur côté serveur :
 - Un compteur à rebours géré par le serveur pour chaque question afin de garantir un timing synchronisé pour
 tous les clients. **[Alicia Saci]**
