@@ -38,11 +38,20 @@ const QuizController = {
         return null
     },
 
-    async checkAnswerForQuestion(quizId, questionId, answers) {
+    async getQUestionWithId(quizId, questionId) {
         try {
-            const question = await Question.findOne({
+            const question = await Question.findOne({  
                 where: { quiz_id: quizId, id: questionId },
             });
+            return question;
+        } catch (error) {
+            console.error(error);
+        }
+        return null;
+    },
+
+    async checkAnswerForQuestion(question, answers) {
+        try {
             if (!question) {
                 return false;
             } else if (question.answers.length === answers.length) {
