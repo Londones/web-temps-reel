@@ -20,6 +20,7 @@ const QuestionRoutes = require("./routes/QuestionRoutes");
 
 const {
   getAllQuiz,
+  getQUestionWithId,
   getQuestionForQuiz,
   checkAnswerForQuestion,
 } = require("./controllers/QuizController");
@@ -39,6 +40,7 @@ const io = socketIo(server, {
 });
 const sessions = [];
 const sessionQuiz = {};
+const questionAnswers = {};
 const TIMER_DURATION = 30;
 
 let timerInterval;
@@ -77,8 +79,8 @@ io.on("connection", (socket) => {
       socket.emit("error", { error: "SessionNotFound!", sessionId: sessionId });
       return;
     }
-    console.log("Add quiz to session", sessionId, quiz);
     sessionQuiz[sessionId] = sessionQuiz[sessionId] || [];
+    console.log("Add quiz to session", sessionId, quiz);
     sessionQuiz[sessionId].push(quiz);
     socket.emit("response-add-quiz", { sessionId, quiz });
     
@@ -129,16 +131,15 @@ io.on("connection", (socket) => {
   /**
    * list question for a quiz
    */
-  socket.on("list-question", async ({ sessionId, quizId, usedQuestions }) => {
+  socket.on("list-question", async ({ userId, sessionId, quizId, usedQuestions }) => {
     if (!sessions.includes(sessionId)) {
       console.log("Session does not exist");
       socket.emit("error", { error: "SessionNotFound!", sessionId: sessionId });
       return;
     }
-    const question = await getQuestionForQuiz(quizId, usedQuestions);
-   
-    io.to(sessionId).emit("quiz-question", { question, quizId });
-    
+    const question = await getQuestionForQuiz(quizId, usedQuestions);    
+
+    io.to(sessionId).emit("quiz-question", { userId, question, quizId });
     if(question != null) {
       startQuestionTimer(sessionId);
     }
@@ -148,33 +149,44 @@ io.on("connection", (socket) => {
   /**
    * Answer a question
    */
-  socket.on(
-    "answer-question",
-    async ({ sessionId, quizId, questionId, answers }) => {
-      
-      if (!sessions.includes(sessionId)) {
-        console.log("Session does not exist");
-        socket.emit("error", {
-          error: "SessionNotFound!",
-          sessionId: sessionId,
-        });
-        return;
-      }
-      
-      const hasCorrect = await checkAnswerForQuestion(
-        quizId,
-        questionId,
-        answers
-      );
-      clearInterval(timerInterval);
-
-      io.to(sessionId).emit("quiz-question-response", {
-        hasCorrect,
-        quizId,
-        questionId,
+  socket.on("answer-question", async ({ userId, sessionId, quizId, questionId, answers }) => {
+    if (!sessions.includes(sessionId)) {
+      console.log("Session does not exist");
+      socket.emit("error", {
+        error: "SessionNotFound!",
+        sessionId: sessionId,
       });
+      return;
     }
-  );
+    
+    const question = await getQUestionWithId(quizId, questionId);
+    const hasCorrect = await checkAnswerForQuestion(
+      question,
+      answers
+    );
+    clearInterval(timerInterval);
+
+    io.to(sessionId).emit("quiz-question-response", {
+      hasCorrect,
+      userId,
+      quizId,
+      questionId,
+    });
+
+    if (question && answers) {
+      const key = sessionId + "-" + quizId + "-" + questionId;
+      const answerCount = questionAnswers[key] || {};
+      const answerKey = answers.sort().join("-");
+      if (answerKey === "") return;
+      if (!answerCount[answerKey]) {
+        answerCount[answerKey] = 0;
+      }
+      answerCount[answerKey]++;
+      questionAnswers[key] = answerCount;
+      console.log("Answer count", answerCount);
+      io.to(sessionId).emit("ref-user-choices", { quizId, questionId, userChoices: answerCount });
+    }
+  });
 
 
   /**

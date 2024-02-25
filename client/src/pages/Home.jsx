@@ -91,6 +91,17 @@ const Home = () => {
             </div>
         </div>
     );
+            <Alert severity="warning"  style={{margin : 'auto 1rem', width : 'fit-content'}}>Make sur to share the session's code before starting the Quiz.</Alert>
+            <QuizListComponent
+              quizzes={quizzes}
+              isAdmin={true}
+              addQuiz={handleAddQuiz}
+            />
+          </>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default Home;

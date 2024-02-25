@@ -26,8 +26,10 @@ class SocketInstance {
       this.quizQuestionResponseCallback &&
         this.quizQuestionResponseCallback(data);
     });
-    
-   
+
+    this.socket.on("ref-user-choices", (data) => {
+      this.refUserChoicesCallback && this.refUserChoicesCallback(data);
+    });  
   }
 
   createTimer(callback) {
@@ -38,7 +40,7 @@ class SocketInstance {
     });
 
     this.socket.on("timer-dec", (data) => {
-      console.log("timer", data);
+      // console.log("timer", data);
       callback(data); 
     });
   }
@@ -81,16 +83,18 @@ class SocketInstance {
     this.socket.emit("quit-room", sessionId);
   }
 
-  listQuestion(sessionId, quizId, usedQuestions) {
-    this.socket.emit("list-question", { sessionId, quizId, usedQuestions });
+  listQuestion(userId, sessionId, quizId, usedQuestions) {
+    this.socket.emit("list-question", { userId, sessionId, quizId, usedQuestions });
   }
 
-  anwserQuestion(sessionId, quizId, questionId, answers) {
+  anwserQuestion(userId, sessionId, quizId, questionId, answers, callback) {
     this.socket.emit("answer-question", {
+      userId,
       sessionId,
       quizId,
       questionId,
       answers,
+      callback
     });
   }
   
@@ -102,6 +106,9 @@ class SocketInstance {
   }
   registerQuizQuestionResponse(callback) {
     this.quizQuestionResponseCallback = callback;
+  }
+  registerRefUserChoices(callback) {
+    this.refUserChoicesCallback = callback;
   }
 
   joinChat(sessionId, username) {
