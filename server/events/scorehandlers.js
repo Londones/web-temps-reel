@@ -8,6 +8,9 @@ const scoreCalculator = (timerValue) => {
 };
 
 const handleStartQuiz = (sessionId, username, quizId) => {
+  if (!userScores[sessionId]) {
+    userScores[sessionId] = {};
+  }
   if (!userScores[sessionId][quizId]) {
     userScores[sessionId][quizId] = {};
   }
