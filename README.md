@@ -92,9 +92,15 @@ de la triche. **[Awa Bah]**
 9. Notifications en temps réel : Envoyer des annonces ou des alertes concernant les événements du quiz,
 comme le début du quiz, le passage à la prochaine question, ou les rappels avant la fin du temps imparti pour
 une question. **[Alicia Saci]**
+    Les types de notifs faites :
+    - notif lorsqu'un utilisateur rejoins une session quiz 
+    - notif 10 seconds avant la fin du quiz
+    - notif lorsqu'une nouvelle session est crée
+    - notif lorsqu'un quiz a débuté
 
-10. Authentification des utilisateurs. **[Awa Bah]**
+11. Authentification des utilisateurs. **[Awa Bah]**
 
-11. Dockerisation. **[Awa Bah]**
+12. Dockerisation. **[Awa Bah]**
 
-12. Stockage de données persistant. **[Awa Bah, Tran Diep Mai Thi, Alicia Saci]**
+13. Stockage de données persistant. **[Awa Bah, Tran Diep Mai Thi, Alicia Saci]**
+
