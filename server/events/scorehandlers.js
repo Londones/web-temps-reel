@@ -1,4 +1,3 @@
-const UserScoreController = require("../controllers/UserScoreController");
 let userScores = {};
 
 const BASE_TIMER_DURATION = 30;

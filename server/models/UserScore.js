@@ -15,7 +15,7 @@ UserScore.init(
       allowNull: false,
     },
     score: {
-      type: DataTypes.DOUBLE,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     rank: {
