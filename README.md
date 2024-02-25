@@ -94,9 +94,7 @@ tous les clients. **[Alicia Saci]**
 pendant un quiz, avec une attention particulière à la gestion des messages en temps réel et à la prévention
 de la triche. **[Awa Bah]**
 
-9. Envoyer des annonces ou des alertes concernant les événements du quiz, comme le début du quiz, le passage à la prochaine question, ou les rappels avant la fin du temps imparti pour une question.  **[Alicia Saci]**
-
-10. Notifications en temps réel : Envoyer des annonces ou des alertes concernant les événements du quiz,
+9. Notifications en temps réel : Envoyer des annonces ou des alertes concernant les événements du quiz,
 comme le début du quiz, le passage à la prochaine question, ou les rappels avant la fin du temps imparti pour
 une question. **[Alicia Saci]**
     Les types de notifs faites :
