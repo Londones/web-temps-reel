@@ -54,7 +54,7 @@ const Quiz = () => {
 
     return (
         <>
-            {/* <ListNotifs type={"success"} /> */}
+            <ListNotifs type={"success"} />
             <div>
                 <Typography variant="h4" component="h2" class="home" style={{ marginTop: '2%' }}>{message}</Typography>
                 {question &&

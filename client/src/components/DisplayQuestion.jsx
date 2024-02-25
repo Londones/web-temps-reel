@@ -7,6 +7,7 @@ const DisplayQuestion = ({ question, sendAnswer, hasCorrect }) => {
     const [selectedOptions, setSelectedOptions] = useState([]);
     const { socket } = SocketProvider;
     const [timer, setTimer] = useState(0);
+    const [displayAnswer, setDisplayAnswer] = useState(true);
 
     const handleOptionChange = (e, option) => {
         if (e.target.checked) {
@@ -19,21 +20,26 @@ const DisplayQuestion = ({ question, sendAnswer, hasCorrect }) => {
     const handleAnswer = () => {
         sendAnswer(selectedOptions);
         setSelectedOptions([]);
+        setDisplayAnswer(true);
     }
 
     useEffect(() => {
         console.log("question", question);
         SocketProvider.createTimer((data) => { setTimer(data) });
-    }, []);
+
+        if (displayAnswer) {
+            setTimeout(() => {
+                setDisplayAnswer(false);
+            }, 2000);
+        }
+    }, [displayAnswer]);
 
     return (
         <div>
-            <ListNotifs type={"warning"} />
             <div class='center'>
-                {timer > 0 && <p>Temps restant: {timer} secondes</p>}
                 <Card class="display-question-card">
-                    {hasCorrect === true && <Alert severity="success">Correct!</Alert>}
-                    {hasCorrect === false && <Alert severity="error">Incorrect!</Alert>}
+                    {displayAnswer === true && hasCorrect === true && <Alert severity="success">Correct!</Alert>}
+                    {displayAnswer === true && hasCorrect === false && <Alert severity="error">Incorrect!</Alert>}
                     <CardContent>
                         {question &&
                             <Typography variant="h5" component="div" sx={{ mb: 1 }}>
@@ -56,7 +62,8 @@ const DisplayQuestion = ({ question, sendAnswer, hasCorrect }) => {
                         </div>
                     </CardContent>
                     <Button id="button-send-answer" color="secondary" variant="outlined" size="small" onClick={handleAnswer}>Send</Button>
-                </Card>
+                    {timer > 0 && <p>Temps restant: {timer} secondes</p>}
+              </Card>
             </div>
         </div>
     )

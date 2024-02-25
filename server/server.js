@@ -81,8 +81,11 @@ io.on("connection", (socket) => {
     sessionQuiz[sessionId] = sessionQuiz[sessionId] || [];
     sessionQuiz[sessionId].push(quiz);
     socket.emit("response-add-quiz", { sessionId, quiz });
+    
     socket.to(sessionId).emit("start-quiz-session", { sessionId, quizId: quiz.id });
-    socket.to(sessionId).emit("notif", {  message: `Un Quizz vient d'être ajouté à la session.` });
+    setTimeout(() => { socket.to(sessionId).emit("notif", {  message: `Un Quizz vient d'être ajouté à la session.` });}, 200);
+   
+    
 
   });
 
@@ -201,7 +204,7 @@ function startQuestionTimer(sessionId) {
       timerValue--;
       io.to(sessionId).emit("timer-dec", timerValue);
       if(timerValue <= 10){
-        io.to(sessionId).emit("notif", { message: `Il vous reste ${timerValue} secondes pour répondre à la question.`});
+        io.to(sessionId).emit("notif-timer", { message: `Il vous reste ${timerValue} secondes pour répondre à la question.`});
       }
     } else {
       io.to(sessionId).emit("times-up")

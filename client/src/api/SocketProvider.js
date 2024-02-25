@@ -46,8 +46,15 @@ class SocketInstance {
 
   listNotifs(callback){
     this.socket.on("notif", (data) => {
-      callback(data);
       console.log("notif", data);
+      callback(data);
+    });
+  }
+
+  listNotifTimer(callback){
+    this.socket.on("notif-timer", (data) => {
+      console.log("notif-timer", data);
+      callback(data);
     });
   }
 
