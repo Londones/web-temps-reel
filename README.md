@@ -68,8 +68,8 @@ bidirectionnelle. **[Alicia Saci]**
 - Diffusion des questions et réception des réponses en temps réel. **[Tran Diep Mai Thi]**
 3. Fonctionnalité de la salle de quiz :
 - Mécanisme permettant aux utilisateurs de participer à un quiz en utilisant un identifiant unique pour la
-session. **[Tran Diep Mai Thi, Alicia Saci]**
-- Support pour plusieurs salles où différents quiz peuvent se dérouler simultanément. **[Tran Diep Mai Thi]**
+session. **[Alicia Saci]**
+- Support pour plusieurs salles où différents quiz peuvent se dérouler simultanément. **[Alicia SACI]**
 4. Minuteur côté serveur :
 - Un compteur à rebours géré par le serveur pour chaque question afin de garantir un timing synchronisé pour
 tous les clients. **[Alicia Saci]**
@@ -86,6 +86,8 @@ tous les clients. **[Alicia Saci]**
 8. Chat en direct lors des quiz : Mettre en place un système de chat où les participants peuvent discuter
 pendant un quiz, avec une attention particulière à la gestion des messages en temps réel et à la prévention
 de la triche. **[Awa Bah]**
+9. Envoyer des annonces ou des alertes concernant les événements du quiz, comme le début du quiz, le passage à la prochaine question, ou les rappels avant la fin du temps imparti pour une question.  **[Alicia Saci]**
+
 
 9. Notifications en temps réel : Envoyer des annonces ou des alertes concernant les événements du quiz,
 comme le début du quiz, le passage à la prochaine question, ou les rappels avant la fin du temps imparti pour
@@ -101,3 +103,4 @@ une question. **[Alicia Saci]**
 12. Dockerisation. **[Awa Bah]**
 
 13. Stockage de données persistant. **[Awa Bah, Tran Diep Mai Thi, Alicia Saci]**
+
