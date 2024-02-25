@@ -11,11 +11,23 @@ Clonez le dépôt :
 
 Pour démarrer l'application, exécutez la commande suivante :
 
-1. Build les images Docker :
+1. Créer un fichier .env avec les variables suivantes :
+```
+POSTGRES_HOST=""
+POSTGRES_USER=""
+POSTGRES_PASSWORD=""
+POSTGRES_DB=""
+JWT_SECRET=""
+JWT_REFRESH_SECRET=""
+PORT=""
+DATABASE_URL=""
+```
+
+2. Build les images Docker :
     ```
     docker compose build
     ```
-2. Démarrer Docker :
+3. Démarrer Docker :
     ```
     docker compose up
     ````
