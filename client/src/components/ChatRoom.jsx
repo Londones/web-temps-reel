@@ -1,18 +1,11 @@
 import { useState, useEffect, forwardRef } from "react";
 import useAuth from "../hooks/useAuth";
-import {
-  Button,
-  Card,
-  Chip,
-  TextField,
-  Snackbar,
-  AlertTitle,
-} from "@mui/material";
+import { Button, Card, Chip, TextField, Snackbar, AlertTitle } from "@mui/material";
 import { SocketProvider } from "../api/SocketProvider";
 import MuiAlert from "@mui/material/Alert";
 
 const Alert = forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 
 const ChatRoom = ({ sessionId }) => {
@@ -33,10 +26,6 @@ const ChatRoom = ({ sessionId }) => {
     SocketProvider.registerChatHistory(handleChatHistory);
     SocketProvider.listenToQuizQuestions(quizIdHandler);
     SocketProvider.listenToCheatingAttempt(cheatDetection);
-
-    return () => {
-      socket.disconnect();
-    };
   }, [socket, sessionId, auth.username]);
 
   const handleChatReceived = (data) => {
@@ -109,7 +98,7 @@ const ChatRoom = ({ sessionId }) => {
         justifyContent: "flex-end",
         position: "absolute",
         right: "7%",
-        bottom: "12%"
+        bottom: "12%",
       }}
     >
       <Card
@@ -118,16 +107,8 @@ const ChatRoom = ({ sessionId }) => {
           padding: "1rem",
         }}
       >
-        <Snackbar
-          open={cheatAlert}
-          autoHideDuration={6000}
-          onClose={handleClose}
-        >
-          <Alert
-            onClose={handleClose}
-            severity={"warning"}
-            sx={{ width: "100%" }}
-          >
+        <Snackbar open={cheatAlert} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity={"warning"} sx={{ width: "100%" }}>
             <AlertTitle>Cheating detected!!</AlertTitle>
             {cheatMessage}
           </Alert>
@@ -152,10 +133,7 @@ const ChatRoom = ({ sessionId }) => {
                   style={{
                     margin: "0.2rem",
                     display: "flex",
-                    justifyContent:
-                      message.username === auth.username
-                        ? "flex-end"
-                        : "flex-start",
+                    justifyContent: message.username === auth.username ? "flex-end" : "flex-start",
                   }}
                   key={index}
                 >
@@ -168,12 +146,8 @@ const ChatRoom = ({ sessionId }) => {
                       },
                     }}
                     label={message.username + ": " + message.message}
-                    variant="outlined"
-                    color={
-                      message.username === auth.username
-                        ? "primary"
-                        : "secondary"
-                    }
+                    variant='outlined'
+                    color={message.username === auth.username ? "primary" : "secondary"}
                   />
                 </div>
               ))}
@@ -184,17 +158,19 @@ const ChatRoom = ({ sessionId }) => {
               }}
             >
               <TextField
-                name="message"
-                label="Message"
-                variant="outlined"
+                name='message'
+                label='Message'
+                variant='outlined'
                 value={message}
                 onChange={handleChatMessage}
               />
-              <Button color="secondary"  variant="outlined" onClick={handleSendMessage}>Send</Button>
+              <Button color='secondary' variant='outlined' onClick={handleSendMessage}>
+                Send
+              </Button>
             </div>
           </div>
         </div>
-        <hr style={{'color' : '#f6f6f6', 'marginTop': '15px', 'width': '72%' }}/>
+        <hr style={{ color: "#f6f6f6", marginTop: "15px", width: "72%" }} />
         {roomUsers && <UsersList />}
       </Card>
     </div>
