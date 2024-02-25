@@ -47,6 +47,18 @@ const Quiz = () => {
         SocketProvider.listQuestion(userId, sessionQuiz, id, usedQuestions);
     }
 
+    SocketProvider.registerRefUserChoices((data) => {
+        if (!question || !data) return;
+        if (data.quizId !== id) return;
+        if (question.id !== data.questionId) return;
+        const keyAnswer = userChoices.join('-');
+        console.log('refUserChoices', data.userChoices, keyAnswer);
+        if (data.userChoices[keyAnswer]) {
+            setChoiceMessage(`${data.userChoices[keyAnswer]} user(s) chose anwser ${keyAnswer}`);
+            handleAlert();
+        }
+    });
+
     const joinRoom = () => {
         listQuestion();
         SocketProvider.registerQuizQuestion((data) => {
@@ -73,20 +85,6 @@ const Quiz = () => {
         if (!effectRan.current) joinRoom();
         return () => effectRan.current = true;
     }, []);
-
-    useEffect(() => {
-        SocketProvider.registerRefUserChoices((data) => {
-            if (!question || !data) return;
-            if (data.quizId !== id) return;
-            if (question.id !== data.questionId) return;
-            const keyAnswer = userChoices.join('-');
-            console.log('refUserChoices', data.userChoices, keyAnswer);
-            if (data.userChoices[keyAnswer]) {
-                setChoiceMessage(`${data.userChoices[keyAnswer]} user(s) chose answer ${keyAnswer}`);
-                handleAlert();
-            }
-        });
-    }, [question, userChoices, id]);
 
     return (
         <>

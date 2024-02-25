@@ -62,34 +62,41 @@ L'application devrait maintenant être accessible à l'adresse du `localhost`.
 1. Interface de création de quiz :
 - Un formulaire simple pour que les administrateurs puissent créer et gérer des quiz. **[Tran Diep Mai Thi]**
 - La capacité d'ajouter des questions à choix multiples avec des options et de désigner la bonne réponse. **[Tran Diep Mai Thi]**
+
 2. Communication en temps réel avec Socket.IO :
 - Établissement de connexions WebSocket entre le serveur et les clients pour une communication
 bidirectionnelle. **[Alicia Saci]**
 - Diffusion des questions et réception des réponses en temps réel. **[Tran Diep Mai Thi]**
+
 3. Fonctionnalité de la salle de quiz :
 - Mécanisme permettant aux utilisateurs de participer à un quiz en utilisant un identifiant unique pour la
 session. **[Alicia Saci]**
 - Support pour plusieurs salles où différents quiz peuvent se dérouler simultanément. **[Alicia SACI]**
+
 4. Minuteur côté serveur :
 - Un compteur à rebours géré par le serveur pour chaque question afin de garantir un timing synchronisé pour
 tous les clients. **[Alicia Saci]**
 - Progression automatique vers la prochaine question à l'expiration du minuteur. **[Alicia Saci]**
+
 5. Déroulement des questions et réponses :
 - Présentation des questions à tous les clients dans une salle lorsque le quiz commence. **[Tran Diep Mai Thi]**
 - Collecte des réponses des clients et verrouillage des réponses à la fin du temps imparti.
+
 6. Retour en direct sur les réponses :
 - Un retour immédiat aux clients après chaque question, indiquant si leur réponse était correcte ou non. **[Tran Diep Mai Thi]**
 - Affichage en temps réel du nombre de clients ayant choisi chaque option de réponse. **[Tran Diep Mai Thi]**
+
 7. Notation et résultats :
 - Calcul des scores côté serveur basé sur la justesse et la rapidité des réponses. **[Awa Bah]**
 - Affichage des scores finaux et des bonnes réponses aux clients à la fin du quiz. **[Awa Bah]**
+
 8. Chat en direct lors des quiz : Mettre en place un système de chat où les participants peuvent discuter
 pendant un quiz, avec une attention particulière à la gestion des messages en temps réel et à la prévention
 de la triche. **[Awa Bah]**
+
 9. Envoyer des annonces ou des alertes concernant les événements du quiz, comme le début du quiz, le passage à la prochaine question, ou les rappels avant la fin du temps imparti pour une question.  **[Alicia Saci]**
 
-
-9. Notifications en temps réel : Envoyer des annonces ou des alertes concernant les événements du quiz,
+10. Notifications en temps réel : Envoyer des annonces ou des alertes concernant les événements du quiz,
 comme le début du quiz, le passage à la prochaine question, ou les rappels avant la fin du temps imparti pour
 une question. **[Alicia Saci]**
     Les types de notifs faites :
