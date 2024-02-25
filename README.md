@@ -31,6 +31,7 @@ L'application devrait maintenant être accessible à l'adresse du `localhost`.
 - Rejoindre une salle de QCM avec l'id de session créée par l'administrateur
 - Prendre le QCM une fois commencé par l'administrateur
 - Chat avec les autres utilisateurs dans la même session
+- Notifications lors d'events (création de session, début de quiz, temps de quiz bientôt ecoulé, nouvelle personne dans la session..)
 
 3. QCM :
 - Chaque question a une ou plusieurs bonnes réponses
@@ -51,10 +52,10 @@ L'application devrait maintenant être accessible à l'adresse du `localhost`.
 
 - Ouvrir une nouvelle fenêtre et s'inscrire pour un compte utilisateur
 - Se connecter en tant que l'utilisateur
-- Coller l'id de session et attendre pour que le QCM commence
+- Insérer l'id de session donné par l'admin et attendre pour que le QCM commence
 
-- Retourner à l'interface administrateur, puis cliquer sur le button **Select quiz for session** pour afficher la liste des QCM
-- Cliquer sur le button **Start quiz for session** pour commencer le QCM côté client
+- Retourner à l'interface administrateur, puis cliquer sur le button **Select quiz for session** pour afficher la liste des quiz.
+- Cliquer sur le button **Start quiz for session** pour commencer la diffusion du QUIZ au utilisateurs connectés à la session.
 
 - Retourner à l'interface utilisateur pour répondre aux questions
 
@@ -103,9 +104,9 @@ une question. **[Alicia Saci]**
     - notif lorsqu'une nouvelle session est crée
     - notif lorsqu'un quiz a débuté
 
-11. Authentification des utilisateurs. **[Awa Bah]**
+10. Authentification des utilisateurs. **[Awa Bah]**
 
-12. Dockerisation. **[Awa Bah]**
+11. Dockerisation. **[Awa Bah]**
 
-13. Stockage de données persistant. **[Awa Bah, Tran Diep Mai Thi, Alicia Saci]**
+12. Stockage de données persistant. **[Awa Bah, Tran Diep Mai Thi, Alicia Saci]**
 
