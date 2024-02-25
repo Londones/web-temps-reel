@@ -15,7 +15,7 @@ const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const ChatRoom = ({ sessionId }) => {
+const ChatRoom = ({ sessionId, show }) => {
   const { socket } = SocketProvider;
   const { auth } = useAuth();
   const [messages, setMessages] = useState([]);
@@ -105,11 +105,11 @@ const ChatRoom = ({ sessionId }) => {
   return (
     <div
       style={{
-        display: "flex",
+        display: show ? "flex" : "none",
         justifyContent: "flex-end",
         position: "absolute",
         right: "7%",
-        bottom: "12%"
+        bottom: "12%",
       }}
     >
       <Card
@@ -190,11 +190,17 @@ const ChatRoom = ({ sessionId }) => {
                 value={message}
                 onChange={handleChatMessage}
               />
-              <Button color="secondary"  variant="outlined" onClick={handleSendMessage}>Send</Button>
+              <Button
+                color="secondary"
+                variant="outlined"
+                onClick={handleSendMessage}
+              >
+                Send
+              </Button>
             </div>
           </div>
         </div>
-        <hr style={{'color' : '#f6f6f6', 'marginTop': '15px', 'width': '72%' }}/>
+        <hr style={{ color: "#f6f6f6", marginTop: "15px", width: "72%" }} />
         {roomUsers && <UsersList />}
       </Card>
     </div>

@@ -24,10 +24,10 @@ const Home = () => {
   const handleTextChange = (newValue) => {
     console.log("handleTextChange", newValue);
     setSessionQuiz(newValue);
-  }
+  };
 
   const handleOpenChat = () => {
-    setShowChat(!showChat); 
+    setShowChat(!showChat);
   };
 
   SocketProvider.registerQuizSessionStarted((data) => {
@@ -47,15 +47,11 @@ const Home = () => {
       >
         Hi <i>{auth?.username}</i> ! Welcome here !
       </Typography>
-      { sessionId &&
-      <Typography
-        variant="h2"
-        component="h1"
-        class="home"
-      >
-        Wait for the quiz to start
-      </Typography>
-      }
+      {sessionId && (
+        <Typography variant="h2" component="h1" class="home">
+          Wait for the quiz to start
+        </Typography>
+      )}
       {!sessionId && (
         <div class="join-session-card">
           <Typography
@@ -85,13 +81,21 @@ const Home = () => {
       )}
       {sessionId && (
         <>
-          <a onClick={handleOpenChat} style={{ cursor: "pointer", position: 'absolute', right: '3%', bottom: '4%' }}>
+          <a
+            onClick={handleOpenChat}
+            style={{
+              cursor: "pointer",
+              position: "absolute",
+              right: "3%",
+              bottom: "4%",
+            }}
+          >
             <img
               src="/src/assets/speech-bubble.png"
               style={{ width: "5rem" }}
             />
           </a>
-          {showChat && <ChatRoom sessionId={sessionId} />}
+          <ChatRoom show={showChat} sessionId={sessionId} />
         </>
       )}
     </div>
