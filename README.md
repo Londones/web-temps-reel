@@ -86,7 +86,6 @@ tous les clients. **[Alicia Saci]**
 8. Chat en direct lors des quiz : Mettre en place un système de chat où les participants peuvent discuter
 pendant un quiz, avec une attention particulière à la gestion des messages en temps réel et à la prévention
 de la triche. **[Awa Bah]**
-
 9. Notifications en temps réel : Envoyer des annonces ou des alertes concernant les événements du quiz,
 comme le début du quiz, le passage à la prochaine question, ou les rappels avant la fin du temps imparti pour
 une question. **[Alicia Saci]**
