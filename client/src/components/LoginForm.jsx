@@ -14,13 +14,16 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import useAuth from "../hooks/useAuth";
+import { Checkbox, FormControlLabel } from "@mui/material";
+import AppTopBar from "../layout/AppTopBar";
+import { CoPresent } from "@mui/icons-material";
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 export default function LoginForm() {
-  const { setAuth } = useAuth();
+  const { setAuth, persist, setPersist } = useAuth();
   const navigateTo = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -56,7 +59,7 @@ export default function LoginForm() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/auth/login",
+        `${import.meta.env.VITE_SERVER_URL}/auth/login`,
         JSON.stringify({ email, password }),
         {
           headers: {
@@ -66,14 +69,25 @@ export default function LoginForm() {
         }
       );
 
-      const accessToken = response?.data?.accessToken;
+      const accessToken = response?.data?.token;
       const userId = response?.data?.id;
-      const nom = response?.data?.nom;
-      const prenom = response?.data?.prenom;
-      setAuth({ userId, nom, prenom, email, password, accessToken });
+      const name = response?.data?.name;
+      const firstName = response?.data?.firstName;
+      const username = response?.data?.username;
+      const role = response?.data?.role;
+      setAuth({ userId, name, firstName, email, username, accessToken, role });
       setEmail("");
       setPassword("");
       navigateTo(from, { replace: true });
+      if (role === "admin") {
+        navigateTo("/admin", { replace: true });
+      } else if (role === "user") {
+        navigateTo("/user", { replace: true });
+      }
+
+      localStorage.setItem("userConnected", true);
+      localStorage.setItem("userName", response.data.firstName);
+
     } catch (error) {
       if (!error?.response) {
         setErrMsg("Erreur réseau");
@@ -88,104 +102,115 @@ export default function LoginForm() {
     }
   };
 
+  const togglePersist = () => {
+    setPersist((prev) => !prev);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("persist", persist);
+  }, [persist]);
+
   return (
-    <Grid
-      container
-      component="main"
-      sx={{ height: "100vh", overflow: "hidden" }}
-    >
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-          {errMsg}
-        </Alert>
-      </Snackbar>
-      <CssBaseline />
+    <>
+      <AppTopBar />
       <Grid
-        item
-        xs={false}
-        sm={4}
-        md={7}
-        sx={{
-          backgroundImage:
-            "url(https://popmenucloud.com/cdn-cgi/image/width%3D1200%2Cheight%3D1200%2Cfit%3Dscale-down%2Cformat%3Dauto%2Cquality%3D60/apcyogdl/8a98f66c-2e92-4b30-a218-14794aa97ebb.jpg)",
-          backgroundRepeat: "no-repeat",
-          backgroundColor: (t) =>
-            t.palette.mode === "light"
-              ? t.palette.grey[50]
-              : t.palette.grey[900],
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <Box
-          sx={{
-            my: 8,
-            mx: 4,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Se connecter
-          </Typography>
+        container
+        component="main"
+        sx={{ height: "100vh", overflow: "hidden" }}
+      >
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            {errMsg}
+          </Alert>
+        </Snackbar>
+        <CssBaseline />
+        <Grid
+          item
+          xs={false}
+          sm={4}
+          md={7}
+
+        />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 1 }}
+            sx={{
+              my: 8,
+              mx: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Adresse email"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              ref={userRef}
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Mot de passe"
-              type="password"
-              id="password"
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
               Se connecter
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Mot de passe oublié ?
-                </Link>
+            </Typography>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 1 }}
+            >
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Adresse email"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                ref={userRef}
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Mot de passe"
+                type="password"
+                id="password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    value="remember"
+                    onClick={togglePersist}
+                    color="primary"
+                  />
+                }
+                label="Se souvenir de moi"
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Se connecter
+              </Button>
+              <Grid container>
+                <Grid item xs>
+                  <Link href="#" variant="body2">
+                    Mot de passe oublié ?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link href="/register" variant="body2">
+                    {"Pas encore inscrit ? S'inscrire"}
+                  </Link>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Link href="/signup" variant="body2">
-                  {"Pas encore inscrit ? S'inscrire"}
-                </Link>
-              </Grid>
-            </Grid>
+            </Box>
           </Box>
-        </Box>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 }

@@ -1,8 +1,17 @@
-#root {
-  max-width: 1280px;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+#root,
+body,
+html {
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
+  font-family: "Poppins", sans-serif;
+  background-color: #381272;
+  min-height: 100vh;
+  color: white;
+  background-image: url("https://images.unsplash.com/photo-1554034483-04fda0d3507b?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
 }
 
 .logo {
@@ -11,9 +20,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -22,6 +33,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -39,4 +51,117 @@
 
 .read-the-docs {
   color: #888;
+}
+
+
+.MuiButton-text {
+  color: rgb(46, 46, 46) !important;
+}
+
+
+.create-quiz-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 20rem;
+  margin: auto;
+}
+
+
+.create-quizz-title,
+.home {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.create-quiz-wrapper {
+  margin-top: 1%;
+
+}
+
+.admin-dashboard {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.logo {
+  font-size: 1rem;
+}
+
+.css-1tyjjsg-MuiTypography-root {
+  color: #381272 !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+}
+
+.quizzes {
+  display: flex;
+  width: 90%;
+  margin: auto;
+  justify-content: start;
+  flex-wrap: wrap;
+}
+
+.quizzes .MuiPaper-root {
+  margin: 1rem;
+  /* box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset !important; */
+  padding: 6rem 0rem;
+  flex-basis: 20%;
+}
+
+.quiz-card {}
+
+
+.join-session-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 20rem;
+  margin: auto;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+}
+
+.create-session-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 20rem;
+  margin: auto;
+  color: black;
+  margin-top: 4rem;
+}
+
+.center {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%);
+}
+
+.logout-btn {
+  border: 2px solid #75A0CB;
+  border-radius: 4px;
+  padding: 7px;
+}
+
+.display-question-card {
+  box-shadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px";
+  padding : 4rem;
+  border-radius : "10px";
+  width: 20rem;
+  margin: auto;
+  background-color: white;
+  color: black;
+  border-radius: 12px;
+  margin-top: 5rem;
+
+}
+
+.question-options {
+  display: flex ;
+  flex-direction: column;
 }
