@@ -25,18 +25,35 @@ class SocketInstance {
     this.socket.on("quiz-question-response", (data) => {
       this.quizQuestionResponseCallback && this.quizQuestionResponseCallback(data);
     });
+
+    this.socket.on("ref-user-choices", (data) => {
+      this.refUserChoicesCallback && this.refUserChoicesCallback(data);
+    });
   }
 
   createTimer(callback) {
     this.socket.on("times-up", (data) => {
       console.log("fini cette question");
       var button = document.getElementById("button-send-answer");
-      // Simulate a click on the button
       button.click();
     });
 
     this.socket.on("timer-dec", (data) => {
-      console.log("timer", data);
+      // console.log("timer", data);
+      callback(data);
+    });
+  }
+
+  listNotifs(callback) {
+    this.socket.on("notif", (data) => {
+      console.log("notif", data);
+      callback(data);
+    });
+  }
+
+  listNotifTimer(callback) {
+    this.socket.on("notif-timer", (data) => {
+      console.log("notif-timer", data);
       callback(data);
     });
   }
@@ -64,16 +81,18 @@ class SocketInstance {
     this.socket.emit("quit-room", sessionId);
   }
 
-  listQuestion(sessionId, quizId, usedQuestions) {
-    this.socket.emit("list-question", { sessionId, quizId, usedQuestions });
+  listQuestion(userId, sessionId, quizId, usedQuestions) {
+    this.socket.emit("list-question", { userId, sessionId, quizId, usedQuestions });
   }
 
-  anwserQuestion(sessionId, quizId, questionId, answers, username) {
+  anwserQuestion(userId, sessionId, quizId, questionId, answers, callback, username) {
     this.socket.emit("answer-question", {
+      userId,
       sessionId,
       quizId,
       questionId,
       answers,
+      callback,
       username,
     });
   }
@@ -86,6 +105,9 @@ class SocketInstance {
   }
   registerQuizQuestionResponse(callback) {
     this.quizQuestionResponseCallback = callback;
+  }
+  registerRefUserChoices(callback) {
+    this.refUserChoicesCallback = callback;
   }
 
   joinChat(sessionId, username) {

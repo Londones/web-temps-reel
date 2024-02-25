@@ -21,6 +21,7 @@ const UserScoreRoutes = require("./routes/UserScoreRoutes");
 
 const {
   getAllQuiz,
+  getQUestionWithId,
   getQuestionForQuiz,
   checkAnswerForQuestion,
 } = require("./controllers/QuizController");
@@ -48,6 +49,7 @@ const io = socketIo(server, {
 });
 const sessions = [];
 const sessionQuiz = {};
+const questionAnswers = {};
 const TIMER_DURATION = 30;
 
 let timerInterval;
@@ -70,6 +72,7 @@ io.on("connection", (socket) => {
     sessions.push(sessionId);
     const quizzes = await getAllQuiz();
     socket.emit("response-session-created", { sessionId: sessionId, quizzes });
+    socket.emit("notif", { message: `Une nouvelle session ${sessionId} vient d'être crée !` });
   });
 
   /**
@@ -81,12 +84,15 @@ io.on("connection", (socket) => {
       socket.emit("error", { error: "SessionNotFound!", sessionId: sessionId });
       return;
     }
-    console.log("Add quiz to session", sessionId, quiz);
     sessionQuiz[sessionId] = sessionQuiz[sessionId] || [];
     sessionQuiz[sessionId].push(quiz);
     handleStartQuiz(sessionId, username, quiz.id);
     socket.emit("response-add-quiz", { sessionId, quiz });
+
     socket.to(sessionId).emit("start-quiz-session", { sessionId, quizId: quiz.id });
+    setTimeout(() => {
+      socket.to(sessionId).emit("notif", { message: `Un Quizz vient d'être ajouté à la session.` });
+    }, 200);
   });
 
   /**
@@ -104,11 +110,13 @@ io.on("connection", (socket) => {
       return;
     }
     socket.join(sessionId);
-    console.log(`Socket ${socket.id} joined session ${sessionId}`);
     io.to(sessionId).emit("response-join", {
       sessionId: sessionId,
-      message: `Bienvenue dans la session ${sessionId} !`,
+      message: `Welcome to the session ${sessionId} !`,
     });
+    socket
+      .to(sessionId)
+      .emit("notif", { message: `Une nouvelle personne vient de rejoindre la session.` });
   });
 
   socket.on("quit-room", (sessionId) => {
@@ -129,7 +137,8 @@ io.on("connection", (socket) => {
   /**
    * list question for a quiz
    */
-  socket.on("list-question", async ({ sessionId, quizId, usedQuestions }) => {
+  socket.on("list-question", async ({ userId, sessionId, quizId, usedQuestions }) => {
+    console.log("heel");
     if (!sessions.includes(sessionId)) {
       console.log("Session does not exist");
       socket.emit("error", { error: "SessionNotFound!", sessionId: sessionId });
@@ -137,7 +146,7 @@ io.on("connection", (socket) => {
     }
     const question = await getQuestionForQuiz(quizId, usedQuestions);
 
-    io.to(sessionId).emit("quiz-question", { question, quizId });
+    io.to(sessionId).emit("quiz-question", { userId, question, quizId });
     if (question != null) {
       startQuestionTimer(sessionId);
     }
@@ -146,33 +155,53 @@ io.on("connection", (socket) => {
   /**
    * Answer a question
    */
-  socket.on("answer-question", async ({ sessionId, quizId, questionId, answers, username }) => {
-    if (!sessions.includes(sessionId)) {
-      console.log("Session does not exist");
-      socket.emit("error", {
-        error: "SessionNotFound!",
-        sessionId: sessionId,
+  socket.on(
+    "answer-question",
+    async ({ userId, sessionId, quizId, questionId, answers, username }) => {
+      if (!sessions.includes(sessionId)) {
+        console.log("Session does not exist");
+        socket.emit("error", {
+          error: "SessionNotFound!",
+          sessionId: sessionId,
+        });
+        return;
+      }
+      const question = await getQUestionWithId(quizId, questionId);
+      const hasCorrect = await checkAnswerForQuestion(question, answers);
+      handleQuestionFeedback(
+        io,
+        socket,
+        timerValue
+      )({ sessionId, username, isCorrect: hasCorrect, quizId });
+      io.to(sessionId).emit("quiz-question-response", {
+        hasCorrect,
+        userId,
+        quizId,
+        questionId,
       });
-      return;
+
+      if (question && answers) {
+        const key = sessionId + "-" + quizId + "-" + questionId;
+        const answerCount = questionAnswers[key] || {};
+        const answerKey = answers.sort().join("-");
+        if (answerKey === "") return;
+        if (!answerCount[answerKey]) {
+          answerCount[answerKey] = 0;
+        }
+        answerCount[answerKey]++;
+        questionAnswers[key] = answerCount;
+        console.log("Answer count", answerCount);
+        io.to(sessionId).emit("ref-user-choices", { quizId, questionId, userChoices: answerCount });
+      }
     }
-    const hasCorrect = await checkAnswerForQuestion(quizId, questionId, answers);
-    handleQuestionFeedback(
-      io,
-      socket,
-      timerValue
-    )({ sessionId, username, isCorrect: hasCorrect, quizId });
-    io.to(sessionId).emit("quiz-question-response", {
-      hasCorrect,
-      quizId,
-      questionId,
-    });
-  });
+  );
 
   /**
    * Disconnect
    */
-  socket.on("disconnect", () => {
+  socket.on("disconnect", (reason) => {
     console.log("Client disconnected");
+    console.log(`Socket ${socket.id} disconnected: ${reason}`);
     handleDisconnect(socket, io);
   });
 
@@ -191,11 +220,14 @@ function startQuestionTimer(sessionId) {
   timerValue = TIMER_DURATION;
   timerInterval = setInterval(() => {
     if (timerValue > 0) {
-      console.log("timerValue", timerValue);
       timerValue--;
       io.to(sessionId).emit("timer-dec", timerValue);
+      if (timerValue <= 10) {
+        io.to(sessionId).emit("notif-timer", {
+          message: `Il vous reste ${timerValue} secondes pour répondre à la question.`,
+        });
+      }
     } else {
-      console.log("Time's up!");
       io.to(sessionId).emit("times-up");
       clearInterval(timerInterval);
     }

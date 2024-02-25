@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { SocketProvider } from "../api/SocketProvider";
 import useAuth from "../hooks/useAuth";
 import ChatRoom from "../components/ChatRoom";
+import ListNotifs from "../components/ListNotif";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -39,39 +40,35 @@ const Home = () => {
 
   return (
     <div>
+      <ListNotifs type={"info"} />
       <Typography
-        variant="h4"
-        component="h2"
-        class="home"
+        variant='h4'
+        component='h2'
+        class='home'
         style={{ color: "white", marginTop: "4%", fontSize: "2.5em" }}
       >
         Hi <i>{auth?.username}</i> ! Welcome here !
       </Typography>
       {sessionId && (
-        <Typography variant="h2" component="h1" class="home">
+        <Typography variant='h2' component='h1' class='home'>
           Wait for the quiz to start
         </Typography>
       )}
       {!sessionId && (
-        <div class="join-session-card">
-          <Typography
-            variant="h4"
-            component="h2"
-            class="home"
-            style={{ color: "black" }}
-          >
+        <div class='join-session-card'>
+          <Typography variant='h4' component='h2' class='home' style={{ color: "black" }}>
             Join a session
           </Typography>
           <TextField
-            id="outlined-basic"
-            label="Session ID"
-            variant="outlined"
+            id='outlined-basic'
+            label='Session ID'
+            variant='outlined'
             onChange={(e) => handleTextChange(e.target.value)}
           />
           <Button
-            color="secondary"
-            variant="outlined"
-            size="small"
+            color='secondary'
+            variant='outlined'
+            size='small'
             onClick={handleJoinSession}
             style={{ marginTop: "1rem" }}
           >
@@ -90,10 +87,7 @@ const Home = () => {
               bottom: "4%",
             }}
           >
-            <img
-              src="/src/assets/speech-bubble.png"
-              style={{ width: "5rem" }}
-            />
+            <img src='/src/assets/speech-bubble.png' style={{ width: "5rem" }} />
           </a>
           <ChatRoom show={showChat} sessionId={sessionId} />
         </>
