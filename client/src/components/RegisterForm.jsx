@@ -15,7 +15,7 @@ import axios from "../api/axios";
 import AppTopBar from "../layout/AppTopBar";
 
 const Alert = forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 
 export default function RegisterForm() {
@@ -55,7 +55,7 @@ export default function RegisterForm() {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/auth/register`,
+        `/auth/register`,
         JSON.stringify({
           name: lastName,
           firstName,
@@ -75,7 +75,7 @@ export default function RegisterForm() {
       if (error.response?.status === 400) {
         setErrMsg(error.response?.data?.error);
       } else {
-        setErrMsg("Inscription impossible");
+        setErrMsg("Network error. Please try again later.");
       }
     }
   };
@@ -83,28 +83,19 @@ export default function RegisterForm() {
   return (
     <>
       <AppTopBar /> {/* Affiche le composant AppTopBar */}
-      <Grid
-        container
-        component="main"
-        sx={{ height: "100vh", overflow: "hidden" }}
-      >
+      <Grid container component='main' sx={{ height: "100vh", overflow: "hidden" }}>
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
           <Alert
             onClose={handleClose}
             severity={errMsg ? "error" : "success"}
             sx={{ width: "100%" }}
           >
-            {errMsg ? errMsg : "Votre compte a bien été créé !"}
+            {errMsg ? errMsg : "Account created successfully"}
           </Alert>
         </Snackbar>
 
         <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
-        />
+        <Grid item xs={false} sm={4} md={7} />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <Box
             sx={{
@@ -118,24 +109,19 @@ export default function RegisterForm() {
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5">
-              S&apos;inscrire
+            <Typography component='h1' variant='h5'>
+              Register
             </Typography>
-            <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{ mt: 3 }}
-            >
+            <Box component='form' noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
-                    autoComplete="given-name"
-                    name="firstName"
+                    autoComplete='given-name'
+                    name='firstName'
                     required
                     fullWidth
-                    id="firstName"
-                    label="Prénom"
+                    id='firstName'
+                    label='First Name'
                     autoFocus
                     ref={userRef}
                     onChange={(e) => setFirstName(e.target.value)}
@@ -145,10 +131,10 @@ export default function RegisterForm() {
                   <TextField
                     required
                     fullWidth
-                    id="lastName"
-                    label="Nom"
-                    name="lastName"
-                    autoComplete="family-name"
+                    id='lastName'
+                    label='Name'
+                    name='lastName'
+                    autoComplete='family-name'
                     onChange={(e) => setLastName(e.target.value)}
                   />
                 </Grid>
@@ -156,10 +142,10 @@ export default function RegisterForm() {
                   <TextField
                     required
                     fullWidth
-                    id="username"
-                    label="Nom d'utilisateur"
-                    name="username"
-                    autoComplete="username"
+                    id='username'
+                    label='Username'
+                    name='username'
+                    autoComplete='username'
                     onChange={(e) => setUsername(e.target.value)}
                   />
                 </Grid>
@@ -167,10 +153,10 @@ export default function RegisterForm() {
                   <TextField
                     required
                     fullWidth
-                    id="email"
-                    label="Adresse email"
-                    name="email"
-                    autoComplete="email"
+                    id='email'
+                    label='Email Address'
+                    name='email'
+                    autoComplete='email'
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </Grid>
@@ -178,29 +164,29 @@ export default function RegisterForm() {
                   <TextField
                     required
                     fullWidth
-                    name="password"
-                    label="Mot de passe"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
+                    name='password'
+                    label='Password'
+                    type='password'
+                    id='password'
+                    autoComplete='new-password'
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </Grid>
               </Grid>
               <Button
-                type="submit"
+                type='submit'
                 fullWidth
-                variant="contained"
-                color="primary"
+                variant='contained'
+                color='primary'
                 sx={{ mt: 3, mb: 2 }}
                 disableElevation
               >
-                S&apos;inscrire
+                Register
               </Button>
-              <Grid container justifyContent="flex-end">
+              <Grid container justifyContent='flex-end'>
                 <Grid item>
-                  <Link href="/login" variant="body2">
-                    Déjà inscrit ? Se connecter
+                  <Link href='/login' variant='body2'>
+                    Already have an account? Login
                   </Link>
                 </Grid>
               </Grid>

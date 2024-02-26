@@ -9,17 +9,16 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import axios from "axios";
+import axios from "../api/axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import useAuth from "../hooks/useAuth";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import AppTopBar from "../layout/AppTopBar";
-import { CoPresent } from "@mui/icons-material";
 
 const Alert = forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 
 export default function LoginForm() {
@@ -58,16 +57,12 @@ export default function LoginForm() {
     event.preventDefault();
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/auth/login`,
-        JSON.stringify({ email, password }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post(`/auth/login`, JSON.stringify({ email, password }), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
 
       const accessToken = response?.data?.token;
       const userId = response?.data?.id;
@@ -87,16 +82,13 @@ export default function LoginForm() {
 
       localStorage.setItem("userConnected", true);
       localStorage.setItem("userName", response.data.firstName);
-
     } catch (error) {
       if (!error?.response) {
-        setErrMsg("Erreur réseau");
-      } else if (error.response?.status === 400) {
-        setErrMsg("Email ou mot de passe incorrect");
+        setErrMsg("Network error");
       } else if (error.response?.status === 401) {
-        setErrMsg("Accès non autorisé");
+        setErrMsg("Invalid credentials");
       } else {
-        setErrMsg("Connexion impossible");
+        setErrMsg("Unknown error");
       }
       handleClick();
     }
@@ -113,24 +105,14 @@ export default function LoginForm() {
   return (
     <>
       <AppTopBar />
-      <Grid
-        container
-        component="main"
-        sx={{ height: "100vh", overflow: "hidden" }}
-      >
+      <Grid container component='main' sx={{ height: "100vh", overflow: "hidden" }}>
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          <Alert onClose={handleClose} severity='error' sx={{ width: "100%" }}>
             {errMsg}
           </Alert>
         </Snackbar>
         <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
-
-        />
+        <Grid item xs={false} sm={4} md={7} />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <Box
             sx={{
@@ -144,66 +126,50 @@ export default function LoginForm() {
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5">
-              Se connecter
+            <Typography component='h1' variant='h5'>
+              Login
             </Typography>
-            <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{ mt: 1 }}
-            >
+            <Box component='form' noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
-                margin="normal"
+                margin='normal'
                 required
                 fullWidth
-                id="email"
-                label="Adresse email"
-                name="email"
-                autoComplete="email"
+                id='email'
+                label='Email Address'
+                name='email'
+                autoComplete='email'
                 autoFocus
                 ref={userRef}
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
               <TextField
-                margin="normal"
+                margin='normal'
                 required
                 fullWidth
-                name="password"
-                label="Mot de passe"
-                type="password"
-                id="password"
+                name='password'
+                label='Password'
+                type='password'
+                id='password'
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
               />
               <FormControlLabel
-                control={
-                  <Checkbox
-                    value="remember"
-                    onClick={togglePersist}
-                    color="primary"
-                  />
-                }
-                label="Se souvenir de moi"
+                control={<Checkbox value='remember' onClick={togglePersist} color='primary' />}
+                label='Remember me'
               />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Se connecter
+              <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+                Login
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Mot de passe oublié ?
+                  <Link href='#' variant='body2'>
+                    Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="/register" variant="body2">
-                    {"Pas encore inscrit ? S'inscrire"}
+                  <Link href='/register' variant='body2'>
+                    {"No account? Register here."}
                   </Link>
                 </Grid>
               </Grid>

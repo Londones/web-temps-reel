@@ -2,10 +2,9 @@ const User = require("../models/User");
 const Quiz = require("../models/Quiz");
 const Question = require("../models/Question");
 const UserScore = require("../models/UserScore");
-const { Sequelize } = require("sequelize");
 require("dotenv").config();
 
-const sequelize = new Sequelize(`${process.env.DATABASE_URL}`);
+const sequelize = require("../config/sequelizeConfig");
 
 async function syncTables() {
   try {

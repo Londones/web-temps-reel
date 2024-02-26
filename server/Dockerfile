@@ -15,3 +15,9 @@ COPY . .
 
 # Make port 3000 available to the world outside this container
 EXPOSE 3000
+
+RUN chmod +x check-tables.sh
+
+RUN chmod +x check-seed.sh
+
+CMD ["./check-tables.sh", "./check-seed.sh"]

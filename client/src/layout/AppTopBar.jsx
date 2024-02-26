@@ -49,7 +49,6 @@ function ResponsiveAppBar() {
   };
 
   const handleQuizRTClick = () => {
-
     if (auth?.role === "user") {
       navigate("/user");
     } else {
@@ -57,16 +56,15 @@ function ResponsiveAppBar() {
     }
   };
 
-
   return (
     <AppBar
-      position="static"
+      position='static'
       style={{ boxShadow: "none", backgroundColor: "white", color: "black" }}
     >
-      <Container maxWidth="xl">
+      <Container maxWidth='xl'>
         <Toolbar disableGutters>
           <Typography
-            variant="h6"
+            variant='h6'
             noWrap
             onClick={handleQuizRTClick}
             sx={{
@@ -83,17 +81,17 @@ function ResponsiveAppBar() {
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
+              size='large'
+              aria-label='account of current user'
+              aria-controls='menu-appbar'
+              aria-haspopup='true'
               onClick={handleOpenNavMenu}
-              color="inherit"
+              color='inherit'
             >
               <MenuIcon />
             </IconButton>
             <Menu
-              id="menu-appbar"
+              id='menu-appbar'
               anchorEl={anchorElNav}
               anchorOrigin={{
                 vertical: "bottom",
@@ -117,14 +115,14 @@ function ResponsiveAppBar() {
                   component={Link}
                   to={page.link}
                 >
-                  <Typography textAlign="center">{page.label}</Typography>
+                  <Typography textAlign='center'>{page.label}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
 
           <Typography
-            variant="h5"
+            variant='h5'
             noWrap
             onClick={handleQuizRTClick}
             sx={{
@@ -156,24 +154,22 @@ function ResponsiveAppBar() {
           {auth?.username ? (
             <Box sx={{ flexGrow: 0 }}>
               <MenuItem onClick={handleLogout}>
-                <Typography textAlign="center" class="logout-btn">Se déconnecter</Typography>
+                <Typography textAlign='center' class='logout-btn'>
+                  Logout
+                </Typography>
               </MenuItem>
             </Box>
           ) : (
             <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
-              <Button
-                component={Link}
-                to="/login"
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                Connexion
+              <Button component={Link} to='/login' sx={{ my: 2, color: "white", display: "block" }}>
+                Login
               </Button>
               <Button
                 component={Link}
-                to="/register"
+                to='/register'
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                Inscription
+                Register
               </Button>
             </Box>
           )}
@@ -182,4 +178,4 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
-export default ResponsiveAppBar
+export default ResponsiveAppBar;
