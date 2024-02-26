@@ -15,7 +15,8 @@ Pour démarrer l'application, exécutez la commande suivante :
    docker compose build
    ```
 2. Démarrer Docker :
-   ```    docker compose up
+   ```
+   docker compose up
     ````
 L'application devrait maintenant être accessible à l'adresse du`localhost:5173`.
 
